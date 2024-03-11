@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (typeof filePath === 'string' && typeof content === 'string') {
     const CACHE_PATH = process.env.VERCEL === '1'
-      ? path.join('/tmp', 'cache')
+      ? path.join('/tmp', 'notion-blog-kit', 'notion', 'cache')
       : path.join(process.cwd(), 'notion', 'cache');
 
     try {

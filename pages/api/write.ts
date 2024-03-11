@@ -26,3 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(400).json({ error: 'Invalid request' });
   }
 }
+
+//https://bus-tracking-server-mu.vercel.app/api/write?filePath=data.json&content={%22test%22:%20true}
+//https://bus-tracking-server-mu.vercel.app/api/read?filePath=data.json

@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (typeof filePath === 'string' && typeof content === 'string') {
     const CACHE_PATH = process.env.VERCEL === '1'
-      ? path.join('/tmp', 'notion-blog-kit', 'notion', 'cache')
+      ? path.join('/tmp', 'cache')
       : path.join(process.cwd(), 'notion', 'cache');
 
     try {
@@ -27,5 +27,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-//https://bus-tracking-server-mu.vercel.app/api/write?filePath=data.json&content={%22test%22:%20true}
+//https://bus-tracking-server-mu.vercel.app/api/write?filePath=data.json&content={test:%20true}
 //https://bus-tracking-server-mu.vercel.app/api/read?filePath=data.json

@@ -4,8 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // fs.promises.readdir를 사용하여 비동기적으로 /tmp 디렉토리 읽기
-    const cacheDir = path.join('/tmp', 'notion-blog-kit', 'notion', 'cache');
+    const cacheDir = path.join('/tmp');
     const files = await fs.readdir(cacheDir);
 
     console.log(files);

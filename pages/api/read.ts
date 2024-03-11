@@ -4,7 +4,7 @@ import { promises as fs } from 'fs';
 
 const CACHE_PATH =
   process.env.VERCEL === '1'
-    ? path.join('/tmp', 'notion-blog-kit', 'notion', 'cache')
+    ? path.join('/tmp')
     : path.join(process.cwd(), 'notion', 'cache');
 
 export default async function handler(

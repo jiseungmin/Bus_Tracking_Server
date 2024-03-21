@@ -153,7 +153,7 @@ export function Driver() {
 }
 
 
-function Package2Icon(props) {
+function Package2Icon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -175,7 +175,7 @@ function Package2Icon(props) {
 }
 
 
-function BellIcon(props) {
+function BellIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -196,7 +196,7 @@ function BellIcon(props) {
 }
 
 
-function HomeIcon(props) {
+function HomeIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -217,7 +217,7 @@ function HomeIcon(props) {
 }
 
 
-function UserIcon(props) {
+function UserIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -238,7 +238,7 @@ function UserIcon(props) {
 }
 
 
-function MapIcon(props) {
+function MapIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -260,7 +260,7 @@ function MapIcon(props) {
 }
 
 
-function ClockIcon(props) {
+function ClockIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -281,7 +281,7 @@ function ClockIcon(props) {
 }
 
 
-function UsersIcon(props) {
+function UsersIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -304,7 +304,7 @@ function UsersIcon(props) {
 }
 
 
-function PlusIcon(props) {
+function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -325,7 +325,7 @@ function PlusIcon(props) {
 }
 
 
-function FileEditIcon(props) {
+function FileEditIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

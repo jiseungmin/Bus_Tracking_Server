@@ -5,12 +5,11 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import React, { useState } from 'react';
-import { getTokens } from "../../src/tokenStorage";
 
 export function HomePage() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const savedPushTokens = getTokens();
+
 
   // 메시지 전송 함수
   const sendMessage = async () => {
@@ -29,8 +28,6 @@ export function HomePage() {
       if (response.ok) {
         // 요청이 성공적으로 처리된 경우
         console.log("Message sent successfully");
-        const responseData = await response.json(); // JSON 응답을 파싱
-        console.log("responseData: ", responseData); // 서버로부터 받은 응답 데이터 출력
         
 alert("Message sent successfully");
       } else {

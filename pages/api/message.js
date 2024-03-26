@@ -29,7 +29,6 @@ export default async function handler(req, res) {
 
     let chunks = expo.chunkPushNotifications(notifications);
 
-     // 비동기 로직을 처리하기 위해 for...of 루프를 async 함수 내에서 직접 사용
      try {
         for (let chunk of chunks) {
           let receipts = await expo.sendPushNotificationsAsync(chunk); // 비동기 요청을 기다림

@@ -13,7 +13,7 @@ export function HomePage() {
   // 메시지 전송 함수
   const sendMessage = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/message', {
+      const response = await fetch('https://bus-tracking-server-mu.vercel.app/api/message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

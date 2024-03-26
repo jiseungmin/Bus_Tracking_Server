@@ -1,13 +1,10 @@
-import { HomePage } from "@/components/component/homepage";
-import Image from "next/image";
-
-
+import { HomePage } from "@/components/component/homepage"; // 경로는 프로젝트 구조에 따라 다를 수 있습니다.
 
 export default function Home() {
+
   return (
-      <div>
-        <HomePage></HomePage>
-      </div>
-  
+    <div>
+      <HomePage />
+    </div>
   );
 }

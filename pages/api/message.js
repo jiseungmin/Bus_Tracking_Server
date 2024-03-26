@@ -5,6 +5,15 @@ import { getTokens } from "../../src/tokenStorage";
 const expo = new Expo();
 
 export default function handler(req, res) {
+    // CORS를 위한 헤더 설정
+    res.setHeader('Access-Control-Allow-Origin', '*'); // 모든 도메인 허용
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    // OPTIONS 요청에 대한 응답 (CORS Preflight 요청)
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
   if (req.method === 'POST') {
     const { title, body } = req.body;
     const savedPushTokens = getTokens();

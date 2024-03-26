@@ -4,7 +4,7 @@ import { getTokens } from "../../src/tokenStorage";
 
 const expo = new Expo();
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   
   if (req.method === 'POST') {
     const { title, body } = req.body;
@@ -29,24 +29,24 @@ export default function handler(req, res) {
 
     let chunks = expo.chunkPushNotifications(notifications);
 
-    (async () => {
-      for (let chunk of chunks) {
-        try {
-          let receipts = await expo.sendPushNotificationsAsync(chunk);
+     // 비동기 로직을 처리하기 위해 for...of 루프를 async 함수 내에서 직접 사용
+     try {
+        for (let chunk of chunks) {
+          let receipts = await expo.sendPushNotificationsAsync(chunk); // 비동기 요청을 기다림
           console.log(receipts);
-        } catch (error) {
-          console.error(error);
         }
+        console.log(`Received message, with title: ${title}, notifications: ${JSON.stringify(notifications)}`);
+        res.status(200).json({
+          message: `Received message, with title: ${title}`,
+          notifications
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to send notifications" });
       }
-    })();
-    
-    console.log(`Received message, with title: ${title}, notifications: ${JSON.stringify(notifications)}`);
-    res.status(200).json({
-        message: `Received message, with title: ${title}`,
-        notifications: notifications
-      });} else {
-    // Handle any other HTTP method
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Methodd ${req.method} Not Allowed`);
-  }
+    } else {
+      // POST가 아닌 다른 HTTP 메소드에 대한 처리
+      res.setHeader('Allow', ['POST']);
+      res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
 }

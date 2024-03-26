@@ -6,8 +6,6 @@ const expo = new Expo();
 
 export default function handler(req, res) {
   
-
-    
   if (req.method === 'POST') {
     const { title, body } = req.body;
     const savedPushTokens = getTokens();
@@ -43,8 +41,10 @@ export default function handler(req, res) {
     })();
     
     console.log(`Received message, with title: ${title}, notifications: ${JSON.stringify(notifications)}`);
-    res.status(200).send(`Received message, with title: ${title} ${savedPushTokens}`);
-  } else {
+    res.status(200).json({
+        message: `Received message, with title: ${title}`,
+        notifications: notifications
+      });} else {
     // Handle any other HTTP method
     res.setHeader('Allow', ['POST']);
     res.status(405).end(`Method ${req.method} Not Allowed`);

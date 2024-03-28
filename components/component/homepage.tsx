@@ -28,8 +28,7 @@ export function HomePage() {
       if (response.ok) {
         // 요청이 성공적으로 처리된 경우
         console.log("Message sent successfully");
-        
-alert("Message sent successfully");
+        alert("Message sent successfully");
       } else {
         // 서버에서 오류 응답을 받은 경우
         console.error("Failed to send message");

@@ -1,12 +1,9 @@
-import { Driver } from "@/components/component/Driver";
-import Image from "next/image";
-
+import { Driver } from "./Driver";
 
 export default function Home() {
   return (
-      <div>
+    <div>
       <Driver></Driver>
-      </div>
-  
+    </div>
   );
 }

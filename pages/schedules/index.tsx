@@ -1,12 +1,9 @@
-import Image from "next/image";
-import { Schedules } from "@/components/component/Schedules";
-
+import { Schedules } from "./Schedules";
 
 export default function Home() {
   return (
-      <div>
-      <Schedules/>
-      </div>
-  
+    <div>
+      <Schedules />
+    </div>
   );
 }

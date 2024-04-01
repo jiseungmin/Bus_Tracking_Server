@@ -1,85 +1,195 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-// テーブルデータのサンプル（実際はAPIから取得したり、静的ファイルから読み込んだりする可能性があります）
-const initialBusSchedule = [
-  // 各行のデータをオブジェクトとして追加します
-  {
-    number: 1, //순
-    sunmoon_departure: "7:40", //아산캠퍼스 출발
-    cheonan_departure: "8:10", //천안역
-    delay: "5분~10분 소요예상", //하이엑스파 건너편
-    delay2: "5분~10분 소요예상", //용암마을
-    arrival: "8:40", //아산캠퍼스 도착
-    status: "금(X)", //금요일 운행여부
-  },
-];
+// APIから取得されるオブジェクトに対する型定義
+type Schedule = {
+  _id: string;
+  scheduleId: number;
+  AsanCampusDeparture: string;
+  TerminalArrival: string;
+  DoojeongMcDonaldsDeparture: string;
+  HomeMartEveryDayDeparture: string;
+  SeoulNationalUniversityHospitalDeparture: string;
+  AsanCampusArrival: string;
+  isFridayDriving: boolean;
+  status: string;
+};
+
+type ApiData = {
+  content: {
+    _id: string;
+    CheonanTerminalStation: Schedule[];
+  };
+};
 
 export default function BusTimetable() {
-  // バススケジュールデータのステートを用意します
-  const [busSchedule, setBusSchedule] = useState(initialBusSchedule);
+  const [busSchedule, setBusSchedule] = useState<Schedule[]>([]);
+  const [editingId, setEditingId] = useState<string | null>(null); // 編集中のスケジュールID
+  const [editScheduleData, setEditScheduleData] = useState<Schedule | null>(
+    null
+  ); // 編集中のスケジュールデータ
 
-  // 新しい行を追加する関数
-  const addNewRow = () => {
-    const newRow = {
-      number: busSchedule.length + 1, // 新しい行番号
-      sunmoon_departure: "", // 新しい出発時刻
-      cheonan_departure: "", //천안역
-      delay: "", //하이엑스파 건너편
-      delay2: "", //용암마을
-      arrival: "", //아산캠퍼스 도착
-      status: "", //금요일 운행여부
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/weekdays/A_CheonanTerminalStation");
+        if (!response.ok) {
+          throw new Error("データの取得に失敗しました。");
+        }
+        const data: ApiData = await response.json();
+        setBusSchedule(data.content.CheonanTerminalStation);
+      } catch (error) {
+        console.error(error);
+      }
     };
-    setBusSchedule([...busSchedule, newRow]);
+    fetchData();
+  }, []);
+
+  const handleEditChange = (value: string, field: keyof Schedule) => {
+    setEditScheduleData((prev) => ({
+      ...prev!,
+      [field]: value,
+    }));
   };
+
+  const toggleEdit = (schedule: Schedule) => {
+    setEditingId(schedule._id);
+    setEditScheduleData(schedule);
+  };
+
+  // 保存ロジック
+  const saveChanges = async (id: string) => {
+    if (!editScheduleData) return;
+    console.log(editScheduleData);
+    try {
+      const response = await fetch(`/api/weekdays/A_CheonanTerminalStation`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editScheduleData),
+      });
+
+      if (!response.ok) {
+        throw new Error("データの保存に失敗しました。");
+      }
+
+      const index = busSchedule.findIndex((schedule) => schedule._id === id);
+      const updatedSchedules = [...busSchedule];
+      if (index !== -1) {
+        updatedSchedules[index] = editScheduleData;
+      }
+      setBusSchedule(updatedSchedules);
+
+      setEditingId(null);
+      setEditScheduleData(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
-      <button onClick={addNewRow}>新しい行を追加</button>
-
       <table>
         <thead>
           <tr>
-            <th>순</th>
-            <th>아산캠퍼스 출발</th>
-            <th>천안역</th>
-            <th>하이엑스파 건너편</th>
-            <th>용암마을</th>
-            <th>아산캠퍼스 도착</th>
-            <th>금요일 운행여부</th>
+            <th>スケジュールID</th>
+            <th>アサンキャンパス出発</th>
+            <th>ターミナル到着</th>
+            <th>ドージョンマクドナルド出発</th>
+            <th>ホームマートエブリデイ出発</th>
+            <th>ソウル国立大学病院出発</th>
+            <th>アサンキャンパス到着</th>
+            <th>金曜日運転</th>
+            <th>状態</th>
           </tr>
         </thead>
         <tbody>
-          {busSchedule.map((item, index) => (
-            <tr key={index}>
-              <td>{item.number}</td>
-              <td>{item.sunmoon_departure}</td>
-              <td>{item.cheonan_departure}</td>
-              <td>{item.delay}</td>
-              <td>{item.delay2}</td>
-              <td>{item.arrival}</td>
-              <td>{item.status}</td>
+          {busSchedule.map((schedule) => (
+            <tr key={schedule._id}>
+              {/* スケジュールIDを表示または編集 */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.scheduleId || ""}
+                    onChange={(e) =>
+                      handleEditChange(e.target.value, "scheduleId")
+                    }
+                  />
+                ) : (
+                  schedule.scheduleId
+                )}
+              </td>
+              {/* ... 他のフィールドも同様に編集可能にする ... */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.AsanCampusDeparture || ""}
+                    onChange={(e) =>
+                      handleEditChange(e.target.value, "AsanCampusDeparture")
+                    }
+                  />
+                ) : (
+                  schedule.AsanCampusDeparture || "N/A"
+                )}
+              </td>
+              <td>{schedule.TerminalArrival}</td>
+              <td>{schedule.DoojeongMcDonaldsDeparture}</td>
+              <td>{schedule.HomeMartEveryDayDeparture}</td>
+              <td>{schedule.SeoulNationalUniversityHospitalDeparture}</td>
+              <td>{schedule.AsanCampusArrival}</td>
+              <td>{schedule.isFridayDriving ? "はい" : "いいえ"}</td>
+              <td>{schedule.status}</td>
+              <td>
+                {editingId === schedule._id ? (
+                  <button onClick={() => saveChanges(schedule._id)}>
+                    保存
+                  </button>
+                ) : (
+                  <button onClick={() => toggleEdit(schedule)}>編集</button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* ここにCSSを適用 */}
       <style jsx>{`
         table {
           width: 100%;
-          border-collapse: collapse;
-          border: 1px solid black;
+          border-collapse: collapse; // テーブルの境界線をまとめる
+          margin-top: 20px; // テーブルの上の余白
         }
         th,
         td {
-          border: 1px solid black;
-          padding: 8px;
-          text-align: center;
+          border: 1px solid #ddd; // セルの境界線
+          padding: 8px; // セル内の余白
+          text-align: left; // テキストを左揃えにする
         }
         th {
-          background-color: #ffcc00; // ヘッダーの背景色
-          color: black;
+          background-color: #4caf50; // ヘッダーの背景色
+          color: white; // ヘッダーのテキスト色
         }
-        // その他のCSSスタイリング...
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        } // 偶数行の背景色
+        tr:hover {
+          background-color: #ddd;
+        } // ホバー時の行の背景色
+
+        // ボタンのスタイル
+        button {
+          background-color: #4caf50; // ボタンの背景色
+          color: white; // ボタンのテキスト色
+          padding: 10px 20px; // ボタン内の余白
+          border: none; // ボタンの境界線をなくす
+          border-radius: 5px; // ボタンの角を丸くする
+          cursor: pointer; // ホバー時のカーソルを指にする
+          margin-top: 20px; // ボタンの上の余白
+        }
+        button:hover {
+          background-color: #45a049; // ホバー時のボタンの背景色
+        }
       `}</style>
     </div>
   );

@@ -5,6 +5,38 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/database/dbConnect";
 import CheonanTerminalStation from "@/database/models/weekdays/M_CheonanTerminalStation";
 
+async function updateSchedule(
+  documentId: string,
+  updateData: { scheduleId: number; [key: string]: any }
+) {
+  try {
+    const scheduleToUpdate = await CheonanTerminalStation.findById(documentId);
+
+    if (!scheduleToUpdate || !scheduleToUpdate.CheonanTerminalStation) {
+      throw new Error("更新対象のスケジュールが見つかりません。");
+    }
+
+    const index = scheduleToUpdate.CheonanTerminalStation.findIndex(
+      (schedule) => schedule.scheduleId === updateData.scheduleId
+    );
+    if (index !== -1) {
+      // スケジュールオブジェクトを直接更新
+      scheduleToUpdate.CheonanTerminalStation[index] = {
+        ...scheduleToUpdate.CheonanTerminalStation[index],
+        ...updateData,
+      };
+      const updatedSchedule = await scheduleToUpdate.save();
+      console.log("更新されたスケジュール:", updatedSchedule);
+    } else {
+      throw new Error(
+        "指定されたscheduleIdを持つスケジュールが見つかりません。"
+      );
+    }
+  } catch (error: any) {
+    console.error("スケジュールの更新中にエラーが発生しました:", error.message);
+  }
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -29,93 +61,17 @@ export default async function handler(
       }
       break;
 
-    // case "PUT":
-    //   try {
-    //     const {
-    //       id: _id,
-    //       scheduleId,
-    //       ...updateData
-    //     } = req.body as {
-    //       id: string;
-    //       scheduleId: number;
-    //     } & ICheonanTerminalStationSchedule;
-
-    //     // 特定のドキュメントを取得します。
-    //     const documentToUpdate = await CheonanTerminalStation.findById(
-    //       "65ffdf4464a583def02d8c73"
-    //     );
-
-    //     if (!documentToUpdate) {
-    //       return res
-    //         .status(404)
-    //         .json({ error: "ドキュメントが見つかりません。" });
-    //     }
-
-    //     // CheonanTerminalStation スケジュールアイテムのインデックスを見つけます。
-    //     const scheduleIndex =
-    //       documentToUpdate.CheonanTerminalStation?.findIndex(
-    //         (item) => item.scheduleId === scheduleId
-    //       );
-
-    //     // スケジュールアイテムが見つかった場合、更新を行います。
-    //     if (scheduleIndex !== -1 && scheduleIndex !== undefined) {
-    //       Object.keys(updateData).forEach((key) => {
-    //         if (
-    //           documentToUpdate.CheonanTerminalStation &&
-    //           documentToUpdate.CheonanTerminalStation[scheduleIndex]
-    //         ) {
-    //           documentToUpdate.CheonanTerminalStation[scheduleIndex][key] =
-    //             updateData[key];
-    //         }
-    //       });
-
-    //       // 更新されたドキュメントを保存します。
-    //       await documentToUpdate.save();
-    //       res.status(200).json({ content: documentToUpdate });
-    //     } else {
-    //       return res.status(404).json({
-    //         error: "指定された scheduleId のスケジュールが見つかりません。",
-    //       });
-    //     }
-    //   } catch (error: any) {
-    //     console.error(error); // エラー内容をログに出力
-    //     res.status(500).json({
-    //       error: error.message || "内部サーバーエラーが発生しました。",
-    //     });
-    //   }
-    //   break;
-
     case "PUT":
+      // PUTリクエストの処理を更新
       try {
-        // リクエストボディから `id` を取得し、`_id` に割り当てます。
-        const { id: _id, ...updateData } = req.body as { id: string } & Record<
-          string,
-          any
-        >;
+        // リクエストボディから更新データを取得します（_idは除外）。
+        const { id, ...updateData } = req.body;
 
-        // updateDataから_idを除外します（もし含まれている場合）。
-        delete updateData._id;
+        // updateSchedule関数を使用してスケジュールを更新します。
+        await updateSchedule("65ffdf4464a583def02d8c73", updateData);
 
-        // IDを使用してドキュメントを検索します。
-        const scheduleToUpdate = await CheonanTerminalStation.findById(
-          "65ffdf4464a583def02d8c73"
-        );
-
-        if (!scheduleToUpdate) {
-          return res
-            .status(404)
-            .json({ error: "更新対象のスケジュールが見つかりません。" });
-        }
-
-        // 更新データでドキュメントを更新します。
-        Object.keys(updateData).forEach((key) => {
-          scheduleToUpdate.set(key, updateData[key]);
-        });
-
-        // 更新を保存します。
-        const updatedSchedule = await scheduleToUpdate.save();
-
-        res.status(200).json({ content: updatedSchedule });
+        // 成功レスポンスを送信します。
+        res.status(200).json({ message: "スケジュールが更新されました。" });
       } catch (error: any) {
         console.error(error); // エラー内容をログに出力
         res.status(500).json({

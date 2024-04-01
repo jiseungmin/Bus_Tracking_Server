@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus, Blocks } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
-import BusTimetable from "@/components/SchedulesDataTable2";
-// import BusTimetable from "@/components/SchedulesDataTable";
+// import BusTimetable from "@/components/SchedulesDataTable2";
+import BusTimetable from "@/components/SchedulesDataTable1";
 import { DataTableDemo } from "./DemoTable";
 // shadcn/ui/ Combobox
 

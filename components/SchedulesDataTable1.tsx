@@ -23,6 +23,10 @@ type ApiData = {
 
 export default function BusTimetable() {
   const [busSchedule, setBusSchedule] = useState<Schedule[]>([]);
+  const [editingId, setEditingId] = useState<string | null>(null); // 編集中のスケジュールID
+  const [editScheduleData, setEditScheduleData] = useState<Schedule | null>(
+    null
+  ); // 編集中のスケジュールデータ
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +36,7 @@ export default function BusTimetable() {
           throw new Error("データの取得に失敗しました。");
         }
         const data: ApiData = await response.json();
+        console.log(data);
         setBusSchedule(data.content.CheonanTerminalStation);
       } catch (error) {
         console.error(error);
@@ -39,6 +44,49 @@ export default function BusTimetable() {
     };
     fetchData();
   }, []);
+
+  const handleEditChange = (value: string, field: keyof Schedule) => {
+    setEditScheduleData((prev) => ({
+      ...prev!,
+      [field]: value,
+    }));
+  };
+
+  const toggleEdit = (schedule: Schedule) => {
+    setEditingId(schedule._id);
+    setEditScheduleData(schedule);
+  };
+
+  // 保存ロジック
+  const saveChanges = async (id: string) => {
+    if (!editScheduleData) return;
+    console.log(editScheduleData);
+    try {
+      const response = await fetch(`/api/weekdays/A_CheonanTerminalStation`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editScheduleData),
+      });
+
+      if (!response.ok) {
+        throw new Error("データの保存に失敗しました。");
+      }
+
+      const index = busSchedule.findIndex((schedule) => schedule._id === id);
+      const updatedSchedules = [...busSchedule];
+      if (index !== -1) {
+        updatedSchedules[index] = editScheduleData;
+      }
+      setBusSchedule(updatedSchedules);
+
+      setEditingId(null);
+      setEditScheduleData(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>
@@ -59,8 +107,34 @@ export default function BusTimetable() {
         <tbody>
           {busSchedule.map((schedule) => (
             <tr key={schedule._id}>
-              <td>{schedule.scheduleId}</td>
-              <td>{schedule.AsanCampusDeparture || "N/A"}</td>
+              {/* スケジュールIDを表示または編集 */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.scheduleId || ""}
+                    onChange={(e) =>
+                      handleEditChange(e.target.value, "scheduleId")
+                    }
+                  />
+                ) : (
+                  schedule.scheduleId
+                )}
+              </td>
+              {/* ... 他のフィールドも同様に編集可能にする ... */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.AsanCampusDeparture || ""}
+                    onChange={(e) =>
+                      handleEditChange(e.target.value, "AsanCampusDeparture")
+                    }
+                  />
+                ) : (
+                  schedule.AsanCampusDeparture || "N/A"
+                )}
+              </td>
               <td>{schedule.TerminalArrival}</td>
               <td>{schedule.DoojeongMcDonaldsDeparture}</td>
               <td>{schedule.HomeMartEveryDayDeparture}</td>
@@ -68,6 +142,15 @@ export default function BusTimetable() {
               <td>{schedule.AsanCampusArrival}</td>
               <td>{schedule.isFridayDriving ? "はい" : "いいえ"}</td>
               <td>{schedule.status}</td>
+              <td>
+                {editingId === schedule._id ? (
+                  <button onClick={() => saveChanges(schedule._id)}>
+                    保存
+                  </button>
+                ) : (
+                  <button onClick={() => toggleEdit(schedule)}>編集</button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

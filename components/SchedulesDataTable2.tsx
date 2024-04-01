@@ -36,6 +36,7 @@ export default function BusTimetable() {
           throw new Error("データの取得に失敗しました。");
         }
         const data: ApiData = await response.json();
+        console.log(data);
         setBusSchedule(data.content.CheonanTerminalStation);
       } catch (error) {
         console.error(error);

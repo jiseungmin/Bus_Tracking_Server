@@ -44,12 +44,13 @@ export default function BusTimetable() {
     };
     fetchData();
   }, []);
-
-  const handleEditChange = (value: string, field: keyof Schedule) => {
-    setEditScheduleData((prev) => ({
-      ...prev!,
+  // handleEditChange関数を更新
+  const handleEditChange = (value: string | boolean, field: keyof Schedule) => {
+    if (editScheduleData == null) return;
+    setEditScheduleData({
+      ...editScheduleData,
       [field]: value,
-    }));
+    });
   };
 
   const toggleEdit = (schedule: Schedule) => {
@@ -102,26 +103,15 @@ export default function BusTimetable() {
             <th>アサンキャンパス到着</th>
             <th>金曜日運転</th>
             <th>状態</th>
+            <th>編集</th>
           </tr>
         </thead>
         <tbody>
           {busSchedule.map((schedule) => (
             <tr key={schedule._id}>
-              {/* スケジュールIDを表示または編集 */}
-              <td>
-                {editingId === schedule._id ? (
-                  <input
-                    type="text"
-                    value={editScheduleData?.scheduleId || ""}
-                    onChange={(e) =>
-                      handleEditChange(e.target.value, "scheduleId")
-                    }
-                  />
-                ) : (
-                  schedule.scheduleId
-                )}
-              </td>
-              {/* ... 他のフィールドも同様に編集可能にする ... */}
+              {/* <th>スケジュールID</th> scheduleId */}
+              <td>{schedule.scheduleId}</td>
+              {/* <th>アサンキャンパス出発</th> AsanCampusDeparture */}
               <td>
                 {editingId === schedule._id ? (
                   <input
@@ -135,13 +125,121 @@ export default function BusTimetable() {
                   schedule.AsanCampusDeparture || "N/A"
                 )}
               </td>
-              <td>{schedule.TerminalArrival}</td>
-              <td>{schedule.DoojeongMcDonaldsDeparture}</td>
-              <td>{schedule.HomeMartEveryDayDeparture}</td>
-              <td>{schedule.SeoulNationalUniversityHospitalDeparture}</td>
-              <td>{schedule.AsanCampusArrival}</td>
-              <td>{schedule.isFridayDriving ? "はい" : "いいえ"}</td>
-              <td>{schedule.status}</td>
+              {/* <th>ターミナル到着</th> <td>{schedule.TerminalArrival}</td> */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.TerminalArrival || ""}
+                    onChange={(e) =>
+                      handleEditChange(e.target.value, "TerminalArrival")
+                    }
+                  />
+                ) : (
+                  schedule.TerminalArrival || "N/A"
+                )}
+              </td>
+              {/* <th>ドージョンマクドナルド出発</th> <td>{schedule.DoojeongMcDonaldsDeparture}</td> */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.DoojeongMcDonaldsDeparture || ""}
+                    onChange={(e) =>
+                      handleEditChange(
+                        e.target.value,
+                        "DoojeongMcDonaldsDeparture"
+                      )
+                    }
+                  />
+                ) : (
+                  schedule.DoojeongMcDonaldsDeparture || "N/A"
+                )}
+              </td>
+              {/* <th>ホームマートエブリデイ出発</th> schedule.HomeMartEveryDayDeparture */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.HomeMartEveryDayDeparture || ""}
+                    onChange={(e) =>
+                      handleEditChange(
+                        e.target.value,
+                        "HomeMartEveryDayDeparture"
+                      )
+                    }
+                  />
+                ) : (
+                  schedule.HomeMartEveryDayDeparture || "N/A"
+                )}
+              </td>
+              {/* <th>ソウル国立大学病院出発</th> <td>{schedule.SeoulNationalUniversityHospitalDeparture}</td> */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={
+                      editScheduleData?.SeoulNationalUniversityHospitalDeparture ||
+                      ""
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        e.target.value,
+                        "SeoulNationalUniversityHospitalDeparture"
+                      )
+                    }
+                  />
+                ) : (
+                  schedule.SeoulNationalUniversityHospitalDeparture || "N/A"
+                )}
+              </td>
+              {/* <th>アサンキャンパス到着</th> <td>{schedule.AsanCampusArrival}</td> */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.AsanCampusArrival || ""}
+                    onChange={(e) =>
+                      handleEditChange(e.target.value, "AsanCampusArrival")
+                    }
+                  />
+                ) : (
+                  schedule.AsanCampusArrival || "N/A"
+                )}
+              </td>
+              {/* <th>金曜日運転</th> <td>{schedule.isFridayDriving ? "はい" : "いいえ"}</td> */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="checkbox"
+                    checked={
+                      editScheduleData
+                        ? editScheduleData.isFridayDriving
+                        : false
+                    }
+                    onChange={(e) =>
+                      handleEditChange(e.target.checked, "isFridayDriving")
+                    }
+                  />
+                ) : schedule.isFridayDriving ? (
+                  "はい"
+                ) : (
+                  "いいえ"
+                )}
+              </td>
+              {/* <th>状態</th> <td>{schedule.status}</td> */}
+              <td>
+                {editingId === schedule._id ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.status || ""}
+                    onChange={(e) => handleEditChange(e.target.value, "status")}
+                  />
+                ) : (
+                  schedule.status
+                )}
+              </td>
+              {/* button=>>saveChanges/toggleEdit */}
               <td>
                 {editingId === schedule._id ? (
                   <button onClick={() => saveChanges(schedule._id)}>
@@ -158,38 +256,70 @@ export default function BusTimetable() {
       <style jsx>{`
         table {
           width: 100%;
-          border-collapse: collapse; // テーブルの境界線をまとめる
-          margin-top: 20px; // テーブルの上の余白
+          border-collapse: collapse;
+          margin-top: 20px;
+          font-size: 0.9rem; // フォントサイズの調整
         }
         th,
         td {
-          border: 1px solid #ddd; // セルの境界線
-          padding: 8px; // セル内の余白
-          text-align: left; // テキストを左揃えにする
+          border: 1px solid #ddd;
+          padding: 10px; // セル内の余白を少し大きく
+          text-align: left;
+          font-family: "Arial", sans-serif; // フォントファミリーの指定
         }
         th {
-          background-color: #4caf50; // ヘッダーの背景色
-          color: white; // ヘッダーのテキスト色
+          background-color: #007bff; // ヘッダーの背景色を変更
+          color: white;
         }
         tr:nth-child(even) {
           background-color: #f2f2f2;
-        } // 偶数行の背景色
+        }
         tr:hover {
           background-color: #ddd;
-        } // ホバー時の行の背景色
-
-        // ボタンのスタイル
-        button {
-          background-color: #4caf50; // ボタンの背景色
-          color: white; // ボタンのテキスト色
-          padding: 10px 20px; // ボタン内の余白
-          border: none; // ボタンの境界線をなくす
-          border-radius: 5px; // ボタンの角を丸くする
-          cursor: pointer; // ホバー時のカーソルを指にする
-          margin-top: 20px; // ボタンの上の余白
         }
-        button:hover {
-          background-color: #45a049; // ホバー時のボタンの背景色
+        .button {
+          // ボタン共通スタイルの抽象化
+          background-color: #007bff; // ボタンの背景色
+          color: white;
+          padding: 6px 12px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.2s; // ホバー時の背景色変更アニメーション
+        }
+        .button:hover {
+          background-color: #0056b3;
+        }
+        input[type="text"],
+        input[type="checkbox"] {
+          padding: 8px;
+          margin: 5px 0; // 入力フィールドの周囲に少し余白を設ける
+          border: 1px solid #ccc; // 境界線を明確にする
+          border-radius: 4px; // やや丸みを帯びた境界線
+          box-sizing: border-box; // ボックスサイズの計算方法を指定
+          width: calc(100% - 16px); // パディングを含めた全体の幅から計算
+        }
+
+        input[type="text"]:focus {
+          border-color: #007bff; // フォーカス時に境界線の色を変更
+          outline: none; // デフォルトのアウトラインを削除
+          box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); // フォーカス時にソフトな影を追加
+        }
+
+        input[type="checkbox"] {
+          margin-right: 8px; // チェックボックスとテキストの間に余白を設ける
+          cursor: pointer; // ホバー時のカーソルを指にする
+        }
+
+        input[type="text"]:hover,
+        input[type="checkbox"]:hover {
+          border-color: #0056b3; // ホバー時に境界線の色を濃くする
+        }
+        @media (max-width: 768px) {
+          // レスポンシブデザインの考慮
+          table {
+            font-size: 0.8rem;
+          }
         }
       `}</style>
     </div>

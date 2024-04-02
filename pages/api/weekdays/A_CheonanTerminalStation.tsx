@@ -4,10 +4,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/database/dbConnect";
 import CheonanTerminalStation from "@/database/models/weekdays/M_CheonanTerminalStation";
+import type { ICheonanTerminalStationSchedule } from "@/database/models/weekdays/M_CheonanTerminalStation";
 
 async function updateSchedule(
   documentId: string,
-  updateData: { scheduleId: number; [key: string]: any }
+  updateData: Partial<ICheonanTerminalStationSchedule> // この部分を修正
 ) {
   try {
     const scheduleToUpdate = await CheonanTerminalStation.findById(documentId);
@@ -19,23 +20,68 @@ async function updateSchedule(
     const index = scheduleToUpdate.CheonanTerminalStation.findIndex(
       (schedule) => schedule.scheduleId === updateData.scheduleId
     );
-    if (index !== -1) {
-      // スケジュールオブジェクトを直接更新
+    // indexが-1の場合、つまりscheduleIdが一致するスケジュールが見つからなかった場合
+    if (index === -1) {
+      // 新しいスケジュールとして追加
+      // 必要なフィールドの存在を確認するロジックをここに追加する必要がある
+      scheduleToUpdate.CheonanTerminalStation.push(
+        updateData as ICheonanTerminalStationSchedule
+      );
+      // 変更をマーク
+      scheduleToUpdate.markModified("CheonanTerminalStation");
+      const updatedSchedule = await scheduleToUpdate.save();
+      console.log("新しいスケジュールが追加されました:", updatedSchedule);
+    } else {
+      // 既存のスケジュールを更新
       scheduleToUpdate.CheonanTerminalStation[index] = {
         ...scheduleToUpdate.CheonanTerminalStation[index],
         ...updateData,
       };
+      // 変更をマーク
+      scheduleToUpdate.markModified("CheonanTerminalStation");
       const updatedSchedule = await scheduleToUpdate.save();
       console.log("更新されたスケジュール:", updatedSchedule);
-    } else {
-      throw new Error(
-        "指定されたscheduleIdを持つスケジュールが見つかりません。"
-      );
     }
   } catch (error: any) {
     console.error("スケジュールの更新中にエラーが発生しました:", error.message);
   }
 }
+
+// async function updateSchedule(
+//   documentId: string,
+//   updateData: { scheduleId: number; [key: string]: any }
+// ) {
+//   try {
+//     const scheduleToUpdate = await CheonanTerminalStation.findById(documentId);
+
+//     // データベースからスケジュールを取得した後のデータ構造をログに出力
+//     console.log("取得したスケジュール:", scheduleToUpdate);
+
+//     if (!scheduleToUpdate || !scheduleToUpdate.CheonanTerminalStation) {
+//       throw new Error("更新対象のスケジュールが見つかりません。");
+//     }
+
+//     const index = scheduleToUpdate.CheonanTerminalStation.findIndex(
+//       (schedule) => schedule.scheduleId === updateData.scheduleId
+//     );
+//     if (index !== -1) {
+//       // スケジュールオブジェクトを直接更新
+//       scheduleToUpdate.CheonanTerminalStation[index] = {
+//         ...scheduleToUpdate.CheonanTerminalStation[index],
+//         ...updateData,
+//       };
+//       const updatedSchedule = await scheduleToUpdate.save();
+//       console.log("更新されたスケジュール:", updatedSchedule);
+//     } else {
+//       // scheduleToUpdate.CheonanTerminalStation.push(updateData);
+//       throw new Error(
+//         "指定されたscheduleIdを持つスケジュールが見つかりません。"
+//       );
+//     }
+//   } catch (error: any) {
+//     console.error("スケジュールの更新中にエラーが発生しました:", error.message);
+//   }
+// }
 
 export default async function handler(
   req: NextApiRequest,

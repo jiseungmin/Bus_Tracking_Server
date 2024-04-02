@@ -39,26 +39,41 @@ export default function SendMessage() {
   return (
     <div>
       <div className="max-w-xl mx-auto my-10">
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col items-center space-y-4">
+          <h1 className="font-extrabold text-3xl text-gray-800 dark:text-white my-4">
+            입력해주세요
+          </h1>
           <input
             type="text"
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
           />
 
-          <input
+          <textarea
+            placeholder="Message"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            className="w-full h-[40vh] px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 resize-none"
+            style={{
+              paddingTop: "1rem",
+              paddingBottom: "1rem",
+              lineHeight: "1.5",
+            }}
+          ></textarea>
+
+          {/* <input
             type="text"
             placeholder="Message"
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
-          />
+            className="w-full h-[50vh] px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
+          /> */}
 
           <button
             onClick={sendMessage}
-            className="flex-1 px-4 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg transition-all duration-200 ease-in-out transform hover:-translate-y-1"
+            className="w-full px-4 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg transition-all duration-200 ease-in-out transform hover:-translate-y-1"
           >
             Send Message
           </button>

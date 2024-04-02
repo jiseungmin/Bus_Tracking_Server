@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 // CheonanTerminalStationスケジュール情報のインターフェースを定義します。
-interface ICheonanTerminalStationSchedule {
+export interface ICheonanTerminalStationSchedule {
   scheduleId: number;
   AsanCampusDeparture: string | null;
   TerminalArrival: string;

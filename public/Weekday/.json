@@ -1,0 +1,34 @@
+{
+  "CheonanAsanStation": [
+    {
+      "scheduleId": 1,
+      "AsanCampusDeparture": "08:15",
+      "CheonanAsanStation_trans1": "08:15",
+      "CheonanStation": "08:15",
+      "CheonanAsanStation_trans2": "08:15",
+      "AsanCampusArrival": "08:15",
+      "isFridayDriving": false,
+      "status": "driving"
+    },
+    {
+      "scheduleId": 2,
+      "AsanCampusDeparture": "08:15",
+      "CheonanAsanStation_trans1": "08:15",
+      "CheonanStation": "08:15",
+      "CheonanAsanStation_trans2": "08:15",
+      "AsanCampusArrival": "08:15",
+      "isFridayDriving": false,
+      "status": "driving"
+    },
+    {
+      "scheduleId": 3,
+      "AsanCampusDeparture": "08:15",
+      "CheonanAsanStation_trans1": "08:15",
+      "CheonanStation": "08:15",
+      "CheonanAsanStation_trans2": "08:15",
+      "AsanCampusArrival": "08:15",
+      "isFridayDriving": false,
+      "status": "driving"
+    }
+  ]
+}

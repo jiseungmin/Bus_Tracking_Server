@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Check, Dot, Plus } from 'lucide-react';
+import { Check, Plus } from 'lucide-react';
 import {
   Menubar,
   MenubarContent,
-  MenubarItem,
   MenubarMenu,
   MenubarRadioGroup,
   MenubarRadioItem,
-  MenubarSeparator,
   MenubarTrigger,
 } from '@/components/ui/menubar';
-import { MenubarItemIndicator } from '@radix-ui/react-menubar';
 
 // DropdownMuen コンポーネントの props タイプ定義
 type DropdownMuenProps = {
   addNewSchedule: () => void; // この関数の正確な型に応じて調整してください
 };
-
-const DropdownMuen: React.FC<DropdownMuenProps> = ({ addNewSchedule }) => {
+const DropdownMuen: React.FC<
+  DropdownMuenProps & { onMenuChange: (menu: string, item: string) => void }
+> = ({ addNewSchedule, onMenuChange }) => {
   // useStateのデフォルト値を設定する代わりに、
   // useEffect内でlocalStorageから値を読み込む
   const [selectedMenu, setSelectedMenu] = useState<'학기' | '방학' | null>(null);
@@ -44,39 +42,22 @@ const DropdownMuen: React.FC<DropdownMuenProps> = ({ addNewSchedule }) => {
       localStorage.setItem('selectedMenu', selectedMenu);
     }
   }, [selectedMenu]);
-  // -----------------------------中身-------------------------------------
-  // テスト
-  const RADIO_ITEMS = ['Andy', 'Benoît', 'Luis'];
-  const [radioSelection, setRadioSelection] = React.useState(RADIO_ITEMS[0]);
-  // 평일 CHEANANTERMIANL
-  const WEEKDAY_CHEANANTERMIANL_ITEMS = [
-    '천안역',
-    '아산(KTX)역',
-    '천안터미널',
-    '온양역/터미널',
-    '천안캠퍼스',
-  ];
-  const [CheonanTerminal, setCheonanTerminal] = React.useState(WEEKDAY_CHEANANTERMIANL_ITEMS[0]);
+
   // 全体動的に変更
   const MENU_ITEMS: Record<string, string[]> = {
     평일: ['천안역', '아산(KTX)역', '천안터미널', '온양역/터미널', '천안캠퍼스'],
     '토요일/공휴일': ['천안역/아산(KTX)역', '천안터미널'],
     일요일: ['천안역/아산(KTX)역', '천안터미널'],
   };
-  // 各メニューの選択状態を管理するための型定義
-  type Selections = {
-    [K in keyof typeof MENU_ITEMS]: string;
-  };
 
-  const [selections, setSelections] = useState<Selections>({
-    평일: '',
-    '토요일/공휴일': '',
-    일요일: '',
+  const [selectedItem, setSelectedItem] = useState<{ menu: string | null; item: string | null }>({
+    menu: null,
+    item: null,
   });
-
   // 選択状態を更新する関数
-  const handleSelectionChange = (menu: keyof typeof MENU_ITEMS, item: string) => {
-    setSelections((prev) => ({ ...prev, [menu]: item }));
+  const handleSelectionChange = (menu: string, item: string) => {
+    setSelectedItem({ menu, item });
+    onMenuChange(menu, item); // 親コンポーネントの状態更新関数を呼び出す
   };
 
   return (
@@ -116,20 +97,25 @@ const DropdownMuen: React.FC<DropdownMuenProps> = ({ addNewSchedule }) => {
         </div>
         <div>
           <Menubar>
-            {/* 動的に変更 */}
             {Object.entries(MENU_ITEMS).map(([menuTitle, items]) => (
               <MenubarMenu key={menuTitle}>
                 <MenubarTrigger>{menuTitle}</MenubarTrigger>
                 <MenubarContent>
-                  <MenubarRadioGroup value={selections[menuTitle as keyof typeof MENU_ITEMS]}>
+                  <MenubarRadioGroup
+                    value={
+                      selectedItem.item && selectedItem.menu === menuTitle ? selectedItem.item : ''
+                    }
+                  >
                     {items.map((item) => (
                       <MenubarRadioItem
-                        className="MenubarRadioItem inset"
+                        className={`MenubarRadioItem inset ${
+                          selectedItem.item === item && selectedItem.menu === menuTitle
+                            ? 'selected'
+                            : ''
+                        }`}
                         key={item}
                         value={item}
-                        onClick={() =>
-                          handleSelectionChange(menuTitle as keyof typeof MENU_ITEMS, item)
-                        }
+                        onClick={() => handleSelectionChange(menuTitle, item)}
                       >
                         {item}
                       </MenubarRadioItem>

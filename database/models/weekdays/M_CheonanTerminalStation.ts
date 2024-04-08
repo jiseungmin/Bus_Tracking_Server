@@ -60,3 +60,5 @@ const CheonanTerminalStation =
   (mongoose.models.Weekday as mongoose.Model<IBusSchedule>) ||
   mongoose.model<IBusSchedule>("Weekday", busScheduleSchema, "Weekday");
 export default CheonanTerminalStation;
+
+// export default mongoose.models.CheonanTerminalStation || mongoose.model('CheonanTerminalStation', cheonanTerminalStationSchema, 'Weekday');

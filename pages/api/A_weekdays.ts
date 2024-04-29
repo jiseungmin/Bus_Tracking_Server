@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data = await CheonanCampus.findById("66150c037a5e033c5904ffb5");
         break;
       case 'CheonanStation':
-        data = await CheonanStation.findById("66126bd2e5520917f5ffee58");
+        data = await CheonanStation.findById("662faf654b75f88cbd2fd142");
         break;
       case 'CheonanTerminalStation':
         data = await CheonanTerminalStation.findById("65ffdf4464a583def02d8c73");

@@ -11,4 +11,4 @@ const cheonanStationSchema = new mongoose.Schema({
   status: String,
 });
 
-export default mongoose.models.CheonanStation || mongoose.model('CheonanStation', cheonanStationSchema, 'Weekday');
+export default mongoose.models.CheonanStation2 || mongoose.model('CheonanStation', cheonanStationSchema, 'Weekday');

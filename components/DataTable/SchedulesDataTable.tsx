@@ -313,36 +313,59 @@ export default function BusTimetable() {
     setEditScheduleData(schedule);
   };
 
-  // 保存ロジック
   const saveChanges = async (scheduleId: number) => {
-    // 更新データの識別子をscheduleIdに変更
-    const updateData = {
-      ...editScheduleData,
-      scheduleId, // idからscheduleIdに変更
-    };
-
-    // 送信するデータをログに出力
-    console.log('送信する更新データ:', updateData);
     if (!editScheduleData) return;
-    console.log(editScheduleData);
+
     try {
-      const response = await fetch(`/api/weekdays/A_CheonanTerminalStation`, {
+      let apiPath = '';
+      let keyValue = '';
+      if (selectedMenu === '평일') {
+        apiPath = '/api/A_weekdays_put';
+        const keyMap: { [key: string]: string } = {
+          천안역: 'CheonanStation',
+          '아산(KTX)역': 'CheonanAsanStation',
+          천안터미널: 'CheonanTerminalStation',
+          '온양역/터미널': 'OnyangOncheonStation',
+          천안캠퍼스: 'CheonanCampus',
+        };
+        keyValue = keyMap[selectedItem];
+      } else if (selectedMenu === '일요일') {
+        apiPath = '/api/A_sundays_put';
+        const keyMap: { [key: string]: string } = {
+          '천안역/아산(KTX)역': 'CheonanAsanStation',
+          천안터미널: 'CheonanTerminalStation',
+        };
+        keyValue = keyMap[selectedItem];
+      }
+
+      const updateData = {
+        ...editScheduleData,
+        scheduleId,
+      };
+
+      // ログで更新データを表示
+      console.log('送信する更新データ:', updateData);
+
+      const fullPath = `${apiPath}?key=${keyValue}`;
+      const response = await fetch(fullPath, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editScheduleData),
+        body: JSON.stringify(updateData),
       });
 
       if (!response.ok) {
         throw new Error('データの保存に失敗しました。');
       }
 
-      // スケジュール配列を更新する際にもscheduleIdを使用
+      const data = await response.json();
+      const updatedSchedule = data.schedule; // APIの応答に基づいて適切に調整してください。
+
       const index = busSchedule.findIndex((schedule) => schedule.scheduleId === scheduleId);
       const updatedSchedules = [...busSchedule];
       if (index !== -1) {
-        updatedSchedules[index] = editScheduleData;
+        updatedSchedules[index] = updatedSchedule || updateData; // 応答がスケジュールを返さない場合は送信データを使用
       }
       setBusSchedule(updatedSchedules);
 

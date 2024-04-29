@@ -9,7 +9,7 @@ const busTimetables = {
       Cheongsudong: '08:15', //청수동
       Sinbangdong: '08:15', //신방동
       AsanCampusArrival: '08:15', //아산캠퍼스도착
-      status: 'driving',
+      status: 'driving', //운행여부
       _id: {
         $oid: '660a92d05eb1e7b17bf683d4',
       },

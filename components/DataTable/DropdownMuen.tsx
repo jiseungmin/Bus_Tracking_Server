@@ -13,7 +13,11 @@ import {
 // DropdownMuen コンポーネントの props タイプ定義
 type DropdownMuenProps = {
   addNewSchedule: () => void; // この関数の正確な型に応じて調整してください
+  onMenuChange: (menu: string, item: string) => void;
+  selectedMenu: string; // 追加
+  selectedItem: string; // 追加
 };
+
 const DropdownMuen: React.FC<
   DropdownMuenProps & { onMenuChange: (menu: string, item: string) => void }
 > = ({ addNewSchedule, onMenuChange }) => {
@@ -66,7 +70,12 @@ const DropdownMuen: React.FC<
         <div className="mr-4">
           <Menubar>
             <MenubarMenu>
-              <MenubarTrigger onClick={() => setSelectedMenu('학기')}>
+              <MenubarTrigger
+                onClick={() => {
+                  setSelectedMenu('학기');
+                  onMenuChange('학기', ''); // 학기が選択された時に親コンポーネントに通知
+                }}
+              >
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <div
                     style={{
@@ -80,7 +89,12 @@ const DropdownMuen: React.FC<
               </MenubarTrigger>
             </MenubarMenu>
             <MenubarMenu>
-              <MenubarTrigger onClick={() => setSelectedMenu('방학')}>
+              <MenubarTrigger
+                onClick={() => {
+                  setSelectedMenu('방학');
+                  onMenuChange('방학', ''); // 방학が選択された時に親コンポーネントに通知
+                }}
+              >
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <div
                     style={{

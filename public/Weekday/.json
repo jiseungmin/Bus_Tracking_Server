@@ -1,11 +1,27 @@
 {
-  "CheonanAsanStation": [
+  "CheonanCampus": [
+    {
+      "scheduleId": 1,
+      "AsanCampusDeparture": "07:30",
+      "Sinbangdong_trans": "07:30",
+      "Cheongsudong_trans": "07:30",
+      "CheonanCampus": "07:30",
+      "Cheongsudong": "07:30",
+      "Sinbangdong": "07:30",
+      "AsanCampusArrival": "07:30",
+      "status": "driving"
+    }
+  ]
+}
+{
+  "OnyangOncheonStation": [
     {
       "scheduleId": 1,
       "AsanCampusDeparture": "08:15",
-      "CheonanAsanStation_trans1": "08:15",
-      "CheonanStation": "08:15",
-      "CheonanAsanStation_trans2": "08:15",
+      "JueunApartmentBusStopDeparture": "08:15",
+      "OnyangOncheonStationStop": "08:15",
+      "TerminalArrival": "08:15",
+      "GwongokElementarySchoolBusStop": "08:15",
       "AsanCampusArrival": "08:15",
       "isFridayDriving": false,
       "status": "driving"
@@ -13,9 +29,10 @@
     {
       "scheduleId": 2,
       "AsanCampusDeparture": "08:15",
-      "CheonanAsanStation_trans1": "08:15",
-      "CheonanStation": "08:15",
-      "CheonanAsanStation_trans2": "08:15",
+      "JueunApartmentBusStopDeparture": "08:15",
+      "OnyangOncheonStationStop": "08:15",
+      "TerminalArrival": "08:15",
+      "GwongokElementarySchoolBusStop": "08:15",
       "AsanCampusArrival": "08:15",
       "isFridayDriving": false,
       "status": "driving"
@@ -23,9 +40,10 @@
     {
       "scheduleId": 3,
       "AsanCampusDeparture": "08:15",
-      "CheonanAsanStation_trans1": "08:15",
-      "CheonanStation": "08:15",
-      "CheonanAsanStation_trans2": "08:15",
+      "JueunApartmentBusStopDeparture": "08:15",
+      "OnyangOncheonStationStop": "08:15",
+      "TerminalArrival": "08:15",
+      "GwongokElementarySchoolBusStop": "08:15",
       "AsanCampusArrival": "08:15",
       "isFridayDriving": false,
       "status": "driving"

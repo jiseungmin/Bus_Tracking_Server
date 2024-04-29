@@ -9,7 +9,7 @@ const busTimetables = {
       GwongokElementarySchoolBusStop: '08:15', // 권곡초버스정류장
       AsanCampusArrival: '08:15', // 아산캠퍼스(도착)
       isFridayDriving: false, // 금요일운행여부
-      status: 'driving',
+      status: 'driving', //운행여부
       _id: {
         $oid: '661261e6e5520917f5ffee55',
       },

@@ -10,9 +10,6 @@ const cheonanAsanStationSchema = new mongoose.Schema({
   AsanCampusArrival: String,
   isFridayDriving: Boolean,
   status: String,
-}); // コレクション名を指定
+});
 
-// export default CheonanAsanStation  = mongoose.models.CheonanAsanStation || mongoose.model('CheonanAsanStation', cheonanAsanStationSchema);
-
-
-export default mongoose.models.CheonanAsanStation || mongoose.model('CheonanAsanStation', cheonanAsanStationSchema, 'Sunday');
+export default mongoose.models.SundaysCheonanAsanStation || mongoose.model('SundaysCheonanAsanStation', cheonanAsanStationSchema, 'Sunday');

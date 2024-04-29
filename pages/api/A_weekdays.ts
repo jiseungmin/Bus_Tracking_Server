@@ -1,5 +1,5 @@
 // pages\api\weekdays\A_main.tsx
-// http://localhost:3000/api/weekdays/A_main
+// http://localhost:3000/api/A_weekdays?key=CheonanCampus
 // pages/api/weekdays/A_main.tsx
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '@/database/dbConnect';
@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data = await CheonanAsanStation.findById("66126978e5520917f5ffee56");
         break;
       case 'CheonanCampus':
-        data = await CheonanCampus.findById("66126b11e5520917f5ffee57");
+        data = await CheonanCampus.findById("66150c037a5e033c5904ffb5");
         break;
       case 'CheonanStation':
         data = await CheonanStation.findById("66126bd2e5520917f5ffee58");
@@ -45,6 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     res.status(200).json({ schedules: data });
+    // res.status(200).json({  data });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

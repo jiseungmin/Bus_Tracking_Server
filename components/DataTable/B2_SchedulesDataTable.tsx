@@ -16,9 +16,17 @@ type Schedule = {
   status: string;
 };
 
+type ApiData = {
+  content: {
+    _id: string;
+    CheonanTerminalStation: Schedule[];
+  };
+};
+
 // 仮定するSchedule型のデフォルト値を生成する関数;
 const createDefaultSchedule = (): Schedule => {
   return {
+    // _id: "",
     scheduleId: Math.floor(Math.random() * 10000),
     AsanCampusDeparture: '7:00',
     TerminalArrival: '7:00',
@@ -31,171 +39,20 @@ const createDefaultSchedule = (): Schedule => {
   };
 };
 
-const weekdaysfieldsMap = {
-  천안역: [
-    'scheduleId',
-    'AsanCampusDeparture',
-    'StationArrival',
-    'HiRexSpa',
-    'YongamVillage',
-    'AsanCampusArrival',
-    'isFridayDriving',
-    'status',
-  ],
-  '아산(KTX)역': [
-    'scheduleId',
-    'AsanCampusDeparture',
-    'CheonanTerminalStation',
-    'AsanCampusArrival',
-    'isFridayDriving',
-    'status',
-  ],
-  천안터미널: [
-    'scheduleId',
-    'AsanCampusDeparture',
-    'TerminalArrival',
-    'DoojeongMcDonaldsDeparture',
-    'HomeMartEveryDayDeparture',
-    'SeoulNationalUniversityHospitalDeparture',
-    'AsanCampusArrival',
-    'isFridayDriving',
-    'status',
-  ],
-  '온양역/터미널': [
-    'scheduleId',
-    'AsanCampusDeparture',
-    'JueunApartmentBusStopDeparture',
-    'OnyangOncheonStationStop',
-    'TerminalArrival',
-    'GwongokElementarySchoolBusStop',
-    'AsanCampusArrival',
-    'isFridayDriving',
-    'status',
-  ],
-  천안캠퍼스: [
-    'scheduleId',
-    'AsanCampusDeparture',
-    'Sinbangdong_trans',
-    'Cheongsudong_trans',
-    'CheonanCampusStop',
-    'Cheongsudong',
-    'Sinbangdong',
-    'AsanCampusArrival',
-    'status',
-  ],
-};
-const sundaysfieldsMap = {
-  '천안역/아산(KTX)역': [
-    'scheduleId',
-    'AsanCampusDeparture',
-    'CheonanAsanStation_trans1',
-    'CheonanStation',
-    'CheonanAsanStation_trans2',
-    'AsanCampusArrival',
-    'isFridayDriving',
-    'status',
-  ],
-  천안터미널: [
-    'scheduleId',
-    'AsanCampusDeparture',
-    'TerminalArrival',
-    'AsanCampusArrival',
-    'isFridayDriving',
-    'status',
-  ],
-};
-const weekdaystableHeaders = {
-  천안역: [
-    '순',
-    '아산캠퍼스 (출발)',
-    '천안역',
-    '하이렉스파 건너편',
-    '용암마을',
-    '아산캠퍼스 (도착)',
-    '금요일운행 여부',
-    '운행 여부',
-    '편집',
-  ],
-  '아산(KTX)역': [
-    '순',
-    '아산캠퍼스 (출발)',
-    '천안아산역출발',
-    '아산캠퍼스 (도착)',
-    '금요일운행 여부',
-    '운행 여부',
-    '편집',
-  ],
-  천안터미널: [
-    '순',
-    '아산캠퍼스 (출발)',
-    '터미널',
-    '두정동맥도날드',
-    '홈마트에브리데이',
-    '서울대정병원',
-    '아산캠퍼스 (도착)',
-    '금요일운행 여부',
-    '운행 여부',
-    '편집',
-  ],
-  '온양역/터미널': [
-    '순',
-    '아산캠퍼스 (출발)',
-    '주은아파트버스정류장',
-    '온양온천역',
-    '아산터미널',
-    '권곡초버스정류장',
-    '아산캠퍼스 (도착)',
-    '금요일운행 여부',
-    '운행 여부',
-    '편집',
-  ],
-  천안캠퍼스: [
-    '순',
-    '아산캠퍼스출발',
-    '신방동',
-    '청수동',
-    '천안캠퍼스',
-    '청수동',
-    '신방동',
-    '아산캠퍼스도착',
-    '운행여부',
-    '편집',
-  ], //CheonanCampus
-};
-const sundaystableHeaders = {
-  '천안역/아산(KTX)역': [
-    '순',
-    '아산캠퍼스 (출발)',
-    '천안아산역',
-    '천안역',
-    '천안아산역',
-    '아산캠퍼스(도착)',
-    '금요일운행여부',
-    '운행 여부',
-    '편집',
-  ],
-  천안터미널: [
-    '순',
-    '아산캠퍼스 (출발)',
-    '터미널',
-    '아산캠퍼스(도착)',
-    '금요일운행 여부',
-    '운행 여부',
-    '편집',
-  ],
-};
-
 export default function BusTimetable() {
   const [busSchedule, setBusSchedule] = useState<Schedule[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null); // 編集中のスケジュールID
   const [editScheduleData, setEditScheduleData] = useState<Schedule | null>(null); // 編集中のスケジュールデータ
+  // selectedMenuとselectedItemを別々のuseStateフックで管理
   const [selectedMenu, setSelectedMenu] = useState<string>(''); // nullから空文字に変更
   const [selectedItem, setSelectedItem] = useState<string>(''); // nullから空文字に変更
+  const [columnHeaders, setColumnHeaders] = useState<string[]>([]);
 
   // 正しい状態更新関数を使用する
   const handleMenuChange = (menu: string, item: string) => {
-    setSelectedMenu(menu);
-    setSelectedItem(item);
+    setSelectedMenu(menu); // 修正: setCurrentMenu -> setSelectedMenu
+    setSelectedItem(item); // 修正: setCurrentItem -> setSelectedItem
+    // ここでその他の必要な処理を行う
   };
 
   useEffect(() => {
@@ -227,7 +84,7 @@ export default function BusTimetable() {
         };
 
         const fullPath = `${apiPath}?key=${keyValue}`;
-        // console.log(fullPath);
+        console.log(fullPath);
         const response = await fetch(fullPath, {
           method: 'POST',
           headers: {
@@ -254,33 +111,6 @@ export default function BusTimetable() {
     fetchData();
   }, [selectedMenu, selectedItem]); // 依存配列に selectedMenu と selectedItem を追加
 
-  const getTableHeaders = () => {
-    if (
-      selectedMenu === '평일' &&
-      weekdaystableHeaders[selectedItem as keyof typeof weekdaystableHeaders]
-    ) {
-      return weekdaystableHeaders[selectedItem as keyof typeof weekdaystableHeaders];
-    } else if (
-      selectedMenu === '일요일' &&
-      sundaystableHeaders[selectedItem as keyof typeof sundaystableHeaders]
-    ) {
-      return sundaystableHeaders[selectedItem as keyof typeof sundaystableHeaders];
-    }
-    return []; // マッチするヘッダーがない場合は空配列を返す
-  };
-
-  const getFieldMap = () => {
-    if (selectedMenu === '평일') {
-      return weekdaysfieldsMap;
-    } else if (selectedMenu === '일요일') {
-      return sundaysfieldsMap;
-    }
-    return {}; // デフォルトの空オブジェクト
-  };
-
-  // 表示するフィールドの配列を取得
-  const fieldsToShow: string[] = (getFieldMap() as { [key: string]: string[] })[selectedItem] || [];
-
   const addNewSchedule = () => {
     // 現在のスケジュールIDの最大値を見つける
     const maxScheduleId = busSchedule.reduce(
@@ -306,7 +136,6 @@ export default function BusTimetable() {
       [field]: value,
     });
   };
-
   // 編集時にscheduleIdを使用するように変更
   const toggleEdit = (schedule: Schedule) => {
     setEditingId(schedule.scheduleId); // _idからscheduleIdに変更
@@ -366,52 +195,136 @@ export default function BusTimetable() {
       <table>
         <thead>
           <tr>
-            {getTableHeaders().map((header, index) => (
-              <th key={index}>{header}</th>
-            ))}
+            {/* 두정동 홈마트 서울대 아산캠퍼스 금요일 터미널 맥도날드 에브리데이 정병원 (도착) 운행여부 */}
+            <th>손</th>
+            {/* <th>スケジュールID</th> */}
+            <th>아산캠퍼스 (출발)</th>
+            {/* <th>アサンキャンパス出発</th> */}
+            <th>터니머</th>
+            {/* <th>ターミナル到着</th> */}
+            <th>두정동 맥도날드</th>
+            {/* <th>ドージョンマクドナルド出発</th> */}
+            <th>홈마트 에브리데이</th>
+            {/* <th>ホームマートエブリデイ出発</th> */}
+            <th>서울대 정병원</th>
+            {/* <th>ソウル国立大学病院出発</th> */}
+            <th>아산캠퍼스(도착)</th>
+            {/* <th>アサンキャンパス到着</th> */}
+            <th>금요일운행 여부</th>
+            {/* <th>金曜日運転</th> */}
+            <th>운행 여부</th>
+            {/* <th>状態</th> */}
+            <th>편집</th>
+            {/* <th>編集</th> */}
           </tr>
         </thead>
         <tbody>
           {busSchedule.map((schedule) => (
             <tr key={schedule.scheduleId}>
-              {fieldsToShow.map((field) => (
-                <td key={field}>
-                  {editingId === schedule.scheduleId ? (
-                    field === 'isFridayDriving' ? (
-                      <Input
-                        className="w-4"
-                        type="checkbox"
-                        checked={editScheduleData ? editScheduleData[field] : false}
-                        onChange={(e) =>
-                          handleEditChange(e.target.checked, field as keyof Schedule)
-                        }
-                      />
-                    ) : (
-                      <Input
-                        type="text"
-                        value={
-                          editScheduleData
-                            ? typeof editScheduleData[field as keyof Schedule] === 'boolean'
-                              ? editScheduleData[field as keyof Schedule]
-                                ? 'true'
-                                : 'false'
-                              : (editScheduleData[field as keyof Schedule] || '').toString()
-                            : ''
-                        }
-                        onChange={(e) => handleEditChange(e.target.value, field as keyof Schedule)}
-                      />
-                    )
-                  ) : field === 'isFridayDriving' ? (
-                    schedule[field as keyof Schedule] ? (
-                      '운행함'
-                    ) : (
-                      '운행안함'
-                    )
-                  ) : (
-                    schedule[field as keyof Schedule] || 'N/A'
-                  )}
-                </td>
-              ))}
+              {/* <th>スケジュールID</th> scheduleId */}
+              <td>{schedule.scheduleId}</td>
+              {/* <th>アサンキャンパス出発</th> AsanCampusDeparture */}
+              <td>
+                {editingId === schedule.scheduleId ? (
+                  <Input
+                    type="text"
+                    value={editScheduleData?.AsanCampusDeparture || ''}
+                    onChange={(e) => handleEditChange(e.target.value, 'AsanCampusDeparture')}
+                  />
+                ) : (
+                  schedule.AsanCampusDeparture || 'N/A'
+                )}
+              </td>
+              {/* <th>ターミナル到着</th> <td>{schedule.TerminalArrival}</td> */}
+              <td>
+                {editingId === schedule.scheduleId ? (
+                  <Input
+                    type="text"
+                    value={editScheduleData?.TerminalArrival || ''}
+                    onChange={(e) => handleEditChange(e.target.value, 'TerminalArrival')}
+                  />
+                ) : (
+                  schedule.TerminalArrival || 'N/A'
+                )}
+              </td>
+              {/* <th>ドージョンマクドナルド出発</th> <td>{schedule.DoojeongMcDonaldsDeparture}</td> */}
+              <td>
+                {editingId === schedule.scheduleId ? (
+                  <Input
+                    type="text"
+                    value={editScheduleData?.DoojeongMcDonaldsDeparture || ''}
+                    onChange={(e) => handleEditChange(e.target.value, 'DoojeongMcDonaldsDeparture')}
+                  />
+                ) : (
+                  schedule.DoojeongMcDonaldsDeparture || 'N/A'
+                )}
+              </td>
+              {/* <th>ホームマートエブリデイ出発</th> schedule.HomeMartEveryDayDeparture */}
+              <td>
+                {editingId === schedule.scheduleId ? (
+                  <Input
+                    type="text"
+                    value={editScheduleData?.HomeMartEveryDayDeparture || ''}
+                    onChange={(e) => handleEditChange(e.target.value, 'HomeMartEveryDayDeparture')}
+                  />
+                ) : (
+                  schedule.HomeMartEveryDayDeparture || 'N/A'
+                )}
+              </td>
+              {/* <th>ソウル国立大学病院出発</th> <td>{schedule.SeoulNationalUniversityHospitalDeparture}</td> */}
+              <td>
+                {editingId === schedule.scheduleId ? (
+                  <Input
+                    type="text"
+                    value={editScheduleData?.SeoulNationalUniversityHospitalDeparture || ''}
+                    onChange={(e) =>
+                      handleEditChange(e.target.value, 'SeoulNationalUniversityHospitalDeparture')
+                    }
+                  />
+                ) : (
+                  schedule.SeoulNationalUniversityHospitalDeparture || 'N/A'
+                )}
+              </td>
+              {/* <th>アサンキャンパス到着</th> <td>{schedule.AsanCampusArrival}</td> */}
+              <td>
+                {editingId === schedule.scheduleId ? (
+                  <Input
+                    type="text"
+                    value={editScheduleData?.AsanCampusArrival || ''}
+                    onChange={(e) => handleEditChange(e.target.value, 'AsanCampusArrival')}
+                  />
+                ) : (
+                  schedule.AsanCampusArrival || 'N/A'
+                )}
+              </td>
+              {/* <th>金曜日運転</th> <td>{schedule.isFridayDriving ? "はい" : "いいえ"}</td> */}
+              <td>
+                {editingId === schedule.scheduleId ? (
+                  <Input
+                    className="w-4"
+                    type="checkbox"
+                    checked={editScheduleData ? editScheduleData.isFridayDriving : false}
+                    onChange={(e) => handleEditChange(e.target.checked, 'isFridayDriving')}
+                  />
+                ) : schedule.isFridayDriving ? (
+                  '운행함'
+                ) : (
+                  '운행안함'
+                )}
+              </td>
+              {/* <th>状態</th> <td>{schedule.status}</td> */}
+              <td>
+                {editingId === schedule.scheduleId ? (
+                  <input
+                    type="text"
+                    value={editScheduleData?.status || ''}
+                    onChange={(e) => handleEditChange(e.target.value, 'status')}
+                  />
+                ) : (
+                  schedule.status
+                )}
+              </td>
+              {/* button=>>saveChanges/toggleEdit */}
               <td>
                 {editingId === schedule.scheduleId ? (
                   <button onClick={() => saveChanges(schedule.scheduleId)}>저장</button>

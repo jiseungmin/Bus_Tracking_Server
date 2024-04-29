@@ -5,7 +5,7 @@ const cheonanCampusSchema = new mongoose.Schema({
   AsanCampusDeparture: String,
   Sinbangdong_trans: String,
   Cheongsudong_trans: String,
-  CheonanCampus: String,
+  CheonanCampusStop: String,
   Cheongsudong: String,
   Sinbangdong: String,
   AsanCampusArrival: String,

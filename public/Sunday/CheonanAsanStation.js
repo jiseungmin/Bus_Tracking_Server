@@ -14,6 +14,7 @@ const busTimetables = {
       AsanCampusArrival: '08:15',
       // 금요일운행여부
       isFridayDriving: true,
+      //운행여부
       status: 'driving',
       _id: {
         $oid: '660a92d05eb1e7b17bf683d4',

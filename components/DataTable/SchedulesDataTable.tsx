@@ -115,6 +115,7 @@ const weekdaystableHeaders = {
     '금요일운행 여부',
     '운행 여부',
     '편집',
+    'add row',
   ],
   '아산(KTX)역': [
     '순',
@@ -325,7 +326,7 @@ export default function BusTimetable() {
       let apiPath = '';
       let keyValue = '';
       if (selectedMenu === '평일') {
-        apiPath = '/api/A_weekdays_put3';
+        apiPath = '/api/A_weekdays_put';
         const keyMap: { [key: string]: string } = {
           천안역: 'CheonanStation',
           '아산(KTX)역': 'CheonanAsanStation',
@@ -365,20 +366,59 @@ export default function BusTimetable() {
       }
 
       const data = await response.json();
-      const updatedSchedule = data.schedule; // APIの応答に基づいて適切に調整してください。
+      console.log('APIからの完全な応答:', data);
+
+      const schedulesArray = data.schedule[keyValue];
+      console.log(`${keyValue}に対応するスケジュール配列:`, schedulesArray);
+
+      if (!schedulesArray) {
+        console.error(`${selectedItem}に対応するスケジュール配列が見つかりません。`);
+        return;
+      }
+
+      // `scheduleId` に一致するスケジュールを検索
+      const updatedSchedule = schedulesArray.find((s: any) => s.scheduleId === scheduleId);
+      console.log('更新されたスケジュール:', updatedSchedule);
 
       const index = busSchedule.findIndex((schedule) => schedule.scheduleId === scheduleId);
       const updatedSchedules = [...busSchedule];
-      if (index !== -1) {
-        updatedSchedules[index] = updatedSchedule || updateData; // 応答がスケジュールを返さない場合は送信データを使用
+
+      if (index !== -1 && updatedSchedule) {
+        updatedSchedules[index] = updatedSchedule;
+        setBusSchedule(updatedSchedules);
+      } else {
+        console.error('適切なスケジュールが見つかりませんでした。');
       }
-      setBusSchedule(updatedSchedules);
 
       setEditingId(null);
       setEditScheduleData(null);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const addScheduleBelowRow = async (scheduleId: number) => {
+    const index = busSchedule.findIndex((s) => s.scheduleId === scheduleId);
+    if (index === -1) return; // IDが見つからない場合は処理を中断
+
+    // 最大IDを求め、新しいスケジュールIDを割り当てる
+    const maxId = Math.max(...busSchedule.map((s) => s.scheduleId)) + 1;
+    const newSchedule: Schedule = {
+      ...busSchedule[index],
+      scheduleId: maxId, // 新しいIDを割り当て
+    };
+
+    // 新しいスケジュールを現在の行の直下に挿入
+    const newBusSchedule = [
+      ...busSchedule.slice(0, index + 1),
+      newSchedule,
+      ...busSchedule.slice(index + 1),
+    ];
+
+    setBusSchedule(newBusSchedule);
+
+    // 新しいスケジュールを保存する
+    await saveChanges(maxId);
   };
 
   return (
@@ -442,10 +482,14 @@ export default function BusTimetable() {
               ))}
               <td>
                 {editingId === schedule.scheduleId ? (
-                  <button onClick={() => saveChanges(schedule.scheduleId)}>저장</button>
+                  <button onClick={() => saveChanges(schedule.scheduleId)}>保存</button>
                 ) : (
-                  <button onClick={() => toggleEdit(schedule)}>편집</button>
+                  <button onClick={() => toggleEdit(schedule)}>編集</button>
                 )}
+              </td>
+              {/* 新しく行追加ボタンを追加 */}
+              <td>
+                <button onClick={() => addScheduleBelowRow(schedule.scheduleId)}>行追加</button>
               </td>
             </tr>
           ))}
@@ -471,6 +515,10 @@ export default function BusTimetable() {
         }
         tr:nth-child(even) {
           background-color: #f2f2f2;
+        }
+        button {
+          margin-left: 10px; // ボタン間の余白調整
+          /* その他のスタイル */
         }
 
         .button {

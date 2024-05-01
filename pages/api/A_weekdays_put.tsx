@@ -6,81 +6,66 @@ import CheonanCampus from '@/database/models/weekdays/M_CheonanCampus';
 import CheonanStation from '@/database/models/weekdays/M_CheonanStation';
 import CheonanTerminalStation from '@/database/models/weekdays/M_CheonanTerminalStation';
 import OnyangOncheonStation from '@/database/models/weekdays/M_OnyangOncheonStation';
-import { ICheonanStationSchedule } from '@/database/models/weekdays/M_CheonanStation';
-
-async function updateSchedule(
-  documentId: string | string[] | undefined,
-  updateData: Partial<ICheonanStationSchedule> // この部分を修正
-) {
-  try {
-    const scheduleToUpdate = await CheonanStation.findById(documentId);
-
-    if (!scheduleToUpdate || !scheduleToUpdate.CheonanStation) {
-      throw new Error('更新対象のスケジュールが見つかりません。');
-    }
-
-    const index = scheduleToUpdate.CheonanStation.findIndex(
-      (schedule: any) => schedule.scheduleId === updateData.scheduleId
-    );
-    // 既存のスケジュールを更新
-    scheduleToUpdate.CheonanStation[index] = {
-      ...scheduleToUpdate.CheonanStation[index],
-      ...updateData,
-    };
-    // 変更をマーク
-    scheduleToUpdate.markModified('CheonanStation');
-    const updatedSchedule = await scheduleToUpdate.save();
-    console.log('更新されたスケジュール:', updatedSchedule);
-  } catch (error: any) {
-    console.error('スケジュールの更新中にエラーが発生しました:', error.message);
-  }
-}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
+  console.log('req.body.scheduleId:', req.body.scheduleId); // クエリのログ
   console.log('req body:', req.body); // クエリのログ
+  const scheduleIdToFind = parseInt(req.body.scheduleId);
+  console.log('ScheduleId:', scheduleIdToFind); // クエリのログ
 
   const key = req.query.key;
-  const _id = req.query._id;
-  const updateData = req.body;
-
-  const scheduleIdToUpdate = req.query.scheduleId;
-
+  console.log('Received key:', key); //CheonanStation
   if (req.method === 'PUT') {
     try {
-      // var data;
-      // switch (key) {
-      //   case 'CheonanAsanStation':
-      //     data = await CheonanAsanStation.findByIdAndUpdate(_id, req.body, { new: true });
-      //     break;
-      //   case 'CheonanCampus':
-      //     data = await CheonanCampus.findByIdAndUpdate(_id, req.body, { new: true });
-      //     break;
-      //   case 'CheonanStation':
-      //     data = await CheonanStation.findByIdAndUpdate(_id, req.body);
+      let data;
+      switch (key) {
+        case 'CheonanAsanStation':
+          data = await CheonanAsanStation.findById('66126978e5520917f5ffee56');
+          break;
+        case 'CheonanCampus':
+          data = await CheonanCampus.findById('66150c037a5e033c5904ffb5');
+          break;
+        case 'CheonanStation':
+          data = await CheonanStation.findById('662faf654b75f88cbd2fd142');
+          break;
+        case 'CheonanTerminalStation':
+          data = await CheonanTerminalStation.findById('65ffdf4464a583def02d8c73');
+          break;
+        case 'OnyangOncheonStation':
+          data = await OnyangOncheonStation.findById('661261e6e5520917f5ffee55');
+          break;
+        default:
+          return res.status(404).json({ error: '指定されたステーションが見つかりません。' });
+      }
 
-      //     data = await CheonanStation.findByIdAndUpdate(_id, req.body, { new: true });
-      //     break;
-      //   case 'CheonanTerminalStation':
-      //     data = await CheonanTerminalStation.findByIdAndUpdate(_id, req.body, { new: true });
-      //     break;
-      //   case 'OnyangOncheonStation':
-      //     data = await OnyangOncheonStation.findByIdAndUpdate(_id, req.body, { new: true });
-      //     break;
-      //   default:
-      //     return res.status(404).json({ error: '指定されたステーションが見つかりません。' });
-      // }
-      const { id, ...updateData } = req.body;
+      if (!data) {
+        return res.status(404).json({ error: 'データが見つかりません。' });
+      }
 
-      // updateSchedule関数を使用してスケジュールを更新します。
-      await updateSchedule(_id, updateData);
-      // await data.save();
+      // const stationData = data.CheonanStation;
+      const stationData = data[key]; // ダイナミックな参照
+      console.log('stationData:', stationData);
 
-      // console.log('data:', typeof data);
-      // console.log('data instanceof CheonanStation:', data instanceof CheonanStation);
-      // console.log('data:', data);
+      // console.log('data.CheonanStation:', JSON.stringify(data.CheonanStation[0]));
+      // console.log('stationData instanceof CheonanStation:', stationData instanceof CheonanStation);
+      const foundSchedule = stationData.find(
+        (schedule: any) => schedule.scheduleId === scheduleIdToFind
+      );
 
-      // res.status(200).json({ schedule: data });
+      if (foundSchedule) {
+        Object.keys(req.body).forEach((key) => {
+          if (key in foundSchedule) {
+            foundSchedule[key] = req.body[key];
+          }
+        });
+
+        await data.save();
+        console.log('data.save:', data);
+        res.status(200).json({ schedule: data });
+      } else {
+        res.status(404).json({ error: 'スケジュールが見つかりません。' });
+      }
     } catch (error: any) {
       console.error(error);
       res.status(500).json({ error: 'サーバー側でエラーが発生しました。', details: error.message });
@@ -90,12 +75,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
-
-// data = await CheonanStation.findOneAndUpdate(
-//   { _id, 'CheonanStation.scheduleId': scheduleId },
-//   { $set: { 'CheonanStation.$[elem]': updateData } },
-//   {
-//     new: true,
-//     arrayFilters: [{ 'elem.scheduleId': scheduleId }],
-//   }
-// );

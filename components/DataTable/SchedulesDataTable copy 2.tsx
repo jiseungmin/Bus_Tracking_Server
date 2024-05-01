@@ -325,7 +325,7 @@ export default function BusTimetable() {
       let apiPath = '';
       let keyValue = '';
       if (selectedMenu === '평일') {
-        apiPath = '/api/A_weekdays_put3';
+        apiPath = '/api/A_weekdays_put';
         const keyMap: { [key: string]: string } = {
           천안역: 'CheonanStation',
           '아산(KTX)역': 'CheonanAsanStation',
@@ -350,7 +350,7 @@ export default function BusTimetable() {
 
       // ログで更新データを表示
       console.log('送信する更新データ:', updateData);
-      const fullPath = `${apiPath}?key=${keyValue}&scheduleId=${scheduleId}&_id=${scheduleIdValue}`;
+      const fullPath = `${apiPath}?key=${keyValue}&_id=${scheduleIdValue}`;
       // const fullPath = `${apiPath}?key=${keyValue}`;
       const response = await fetch(fullPath, {
         method: 'PUT',

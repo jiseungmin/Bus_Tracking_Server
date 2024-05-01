@@ -16,6 +16,13 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "database/dbconnect.ts", "database/models/bus.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "database/dbconnect.ts",
+    "database/models/bus.js",
+    "pages/api/A_weekdays_put3.js"
+  ],
   "exclude": ["node_modules"]
 }

@@ -9,10 +9,10 @@ import OnyangOncheonStation from '@/database/models/weekdays/M_OnyangOncheonStat
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
-  console.log('req.body.scheduleId:', req.body.scheduleId); // クエリのログ
-  console.log('req body:', req.body); // クエリのログ
+  console.log('req.body.scheduleId:', req.body.scheduleId);
+  console.log('req body:', req.body);
   const scheduleIdToFind = parseInt(req.body.scheduleId);
-  console.log('ScheduleId:', scheduleIdToFind); // クエリのログ
+  console.log('ScheduleId:', scheduleIdToFind);
 
   const key = req.query.key;
   console.log('Received key:', key); //CheonanStation

@@ -287,23 +287,6 @@ export default function BusTimetable() {
   // 表示するフィールドの配列を取得
   const fieldsToShow: string[] = (getFieldMap() as { [key: string]: string[] })[selectedItem] || [];
 
-  const addNewSchedule = () => {
-    // 現在のスケジュールIDの最大値を見つける
-    const maxScheduleId = busSchedule.reduce(
-      (maxId, schedule) => Math.max(maxId, schedule.scheduleId),
-      0
-    );
-
-    // 新しいスケジュールオブジェクトを生成
-    const newSchedule = createDefaultSchedule();
-
-    // 新しいスケジュールIDを設定（最大スケジュールID + 1）
-    newSchedule.scheduleId = maxScheduleId + 1;
-
-    // 新しいスケジュールオブジェクトをスケジュール配列に追加
-    setBusSchedule((prevSchedules) => [...prevSchedules, newSchedule]);
-  };
-
   // handleEditChange関数を更新
   const handleEditChange = (value: string | boolean, field: keyof Schedule) => {
     if (editScheduleData == null) return;
@@ -396,6 +379,24 @@ export default function BusTimetable() {
       console.error(error);
     }
   };
+  const addNewSchedule = () => {
+    // 現在のスケジュールIDの最大値を見つける
+    const maxScheduleId = busSchedule.reduce(
+      (maxId, schedule) => Math.max(maxId, schedule.scheduleId),
+      0
+    );
+
+    // 新しいスケジュールオブジェクトを生成
+    const newSchedule = createDefaultSchedule();
+
+    // 新しいスケジュールIDを設定（最大スケジュールID + 1）
+    newSchedule.scheduleId = maxScheduleId + 1;
+
+    // 新しいスケジュールオブジェクトをスケジュール配列に追加
+    setBusSchedule((prevSchedules) => [...prevSchedules, newSchedule]);
+    saveChanges(newSchedule.scheduleId); // 新しいスケジュールを保存
+    console.log('newSchedule:', newSchedule);
+  };
 
   const addScheduleBelowRow = async (scheduleId: number) => {
     const index = busSchedule.findIndex((s) => s.scheduleId === scheduleId);
@@ -419,6 +420,7 @@ export default function BusTimetable() {
 
     // 新しいスケジュールを保存する
     await saveChanges(maxId);
+    console.log('maxId:', maxId);
   };
 
   return (

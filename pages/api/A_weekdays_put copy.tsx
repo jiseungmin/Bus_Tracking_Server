@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '@/database/dbConnect';
+import dbConnect from '@/database/DBconnect';
 
 import CheonanAsanStation from '@/database/models/weekdays/M_CheonanAsanStation';
 import CheonanCampus from '@/database/models/weekdays/M_CheonanCampus';

@@ -2,7 +2,7 @@
 // http://localhost:3000/api/weekdays/A_CheonanTerminalStation
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '@/database/dbConnect';
+import dbConnect from '@/database/DBconnect';
 import CheonanTerminalStation from '@/database/models/weekdays/M_CheonanTerminalStation';
 import type { ICheonanTerminalStationSchedule } from '@/database/models/weekdays/M_CheonanTerminalStation';
 

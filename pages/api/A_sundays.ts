@@ -1,7 +1,7 @@
 // http://localhost:3000/api/A_sundays?key=CheonanAsanStation
 // pages\api\A_sundays.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '@/database/dbConnect';
+import dbConnect from '@/database/DBconnect';
 
 // 異なるステーションのデータモデルをインポートします
 import SundaysCheonanAsanStation from '@/database/models/sundays/M_CheonanAsanStation';

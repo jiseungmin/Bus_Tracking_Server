@@ -1,9 +1,9 @@
-import { Driver } from "./Driver";
+import Driver from './Driver';
 
-export default function Home() {
+export default function home() {
   return (
     <div>
-      <Driver></Driver>
+      <Driver />
     </div>
   );
 }

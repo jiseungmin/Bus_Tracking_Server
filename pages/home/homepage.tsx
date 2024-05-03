@@ -1,9 +1,9 @@
-import React from "react";
-import SendMessage from "../../components/SendMessage";
-import Header from "../../components/Header";
-import Sidebar from "../../components/Sidebar";
+import React from 'react';
+import SendMessage from '../../components/SendMessage';
+import Header from '../../components/Header';
+import Sidebar from '../../components/Sidebar';
 
-export function HomePage() {
+export default function HomePage() {
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
       <Sidebar />

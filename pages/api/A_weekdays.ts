@@ -2,7 +2,7 @@
 // http://localhost:3000/api/A_weekdays?key=CheonanCampus
 // pages/api/weekdays/A_main.tsx
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '@/database/dbConnect';
+import dbConnect from '@/database/DBconnect';
 
 // 異なるステーションのデータモデルをインポートします
 import CheonanAsanStation from '@/database/models/weekdays/M_CheonanAsanStation';

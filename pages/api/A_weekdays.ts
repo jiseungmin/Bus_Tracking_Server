@@ -2,7 +2,7 @@
 // http://localhost:3000/api/A_weekdays?key=CheonanCampus
 // pages/api/weekdays/A_main.tsx
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '@/database/DBconnect';
+import DbConnect from '@/database/dbconnect';
 
 // 異なるステーションのデータモデルをインポートします
 import CheonanAsanStation from '@/database/models/weekdays/M_CheonanAsanStation';
@@ -12,7 +12,7 @@ import CheonanTerminalStation from '@/database/models/weekdays/M_CheonanTerminal
 import OnyangOncheonStation from '@/database/models/weekdays/M_OnyangOncheonStation';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await dbConnect();
+  await DbConnect();
 
   const { key } = req.query; // クエリパラメータからkeyの値を取得
 

@@ -6,8 +6,8 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
-async function dbConnect() {
+async function DbConnect() {
   await mongoose.connect(MONGODB_URI);
 }
 
-export default dbConnect;
+export default DbConnect;

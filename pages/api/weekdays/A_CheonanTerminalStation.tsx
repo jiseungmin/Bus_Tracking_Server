@@ -2,7 +2,7 @@
 // http://localhost:3000/api/weekdays/A_CheonanTerminalStation
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '@/database/DBconnect';
+import DbConnect from '@/database/dbconnect';
 import CheonanTerminalStation from '@/database/models/weekdays/M_CheonanTerminalStation';
 import type { ICheonanTerminalStationSchedule } from '@/database/models/weekdays/M_CheonanTerminalStation';
 
@@ -45,7 +45,7 @@ async function updateSchedule(
   }
 }
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await dbConnect();
+  await DbConnect();
 
   switch (req.method) {
     case 'GET':

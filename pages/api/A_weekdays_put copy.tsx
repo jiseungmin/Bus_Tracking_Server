@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '@/database/DBconnect';
+import DbConnect from '@/database/dbconnect';
 
 import CheonanAsanStation from '@/database/models/weekdays/M_CheonanAsanStation';
 import CheonanCampus from '@/database/models/weekdays/M_CheonanCampus';
@@ -8,7 +8,7 @@ import CheonanTerminalStation from '@/database/models/weekdays/M_CheonanTerminal
 import OnyangOncheonStation from '@/database/models/weekdays/M_OnyangOncheonStation';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await dbConnect();
+  await DbConnect();
   console.log('req.body.scheduleId:', req.body.scheduleId);
   console.log('req body:', req.body);
   const scheduleIdToFind = parseInt(req.body.scheduleId);

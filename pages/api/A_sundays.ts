@@ -1,14 +1,14 @@
 // http://localhost:3000/api/A_sundays?key=CheonanAsanStation
 // pages\api\A_sundays.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '@/database/DBconnect';
+import DbConnect from '@/database/dbconnect';
 
 // 異なるステーションのデータモデルをインポートします
 import SundaysCheonanAsanStation from '@/database/models/sundays/M_CheonanAsanStation';
 import SundaysCheonanTerminalStation from '@/database/models/sundays/M_CheonanTerminalStation';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await dbConnect();
+  await DbConnect();
 
   const { key } = req.query; // クエリパラメータからkeyの値を取得
 

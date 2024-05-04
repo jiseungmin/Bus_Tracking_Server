@@ -1,11 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import DbConnect from '@/database/dbconnect';
 
-import CheonanAsanStation from '@/database/models/weekdays/M_CheonanAsanStation';
-import CheonanCampus from '@/database/models/weekdays/M_CheonanCampus';
-import CheonanStation from '@/database/models/weekdays/M_CheonanStation';
-import CheonanTerminalStation from '@/database/models/weekdays/M_CheonanTerminalStation';
-import OnyangOncheonStation from '@/database/models/weekdays/M_OnyangOncheonStation';
+// 異なるステーションのデータモデルをインポートします
+import HolidaysCheonanAsanStation from '@/database/models/holidays/M_CheonanAsanStation';
+import HolidaysCheonanTerminalStation from '@/database/models/holidays/M_CheonanTerminalStation';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await DbConnect();
@@ -31,19 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       let data;
       switch (key) {
         case 'CheonanAsanStation':
-          data = await CheonanAsanStation.findById('66126978e5520917f5ffee56');
-          break;
-        case 'CheonanCampus':
-          data = await CheonanCampus.findById('66150c037a5e033c5904ffb5');
-          break;
-        case 'CheonanStation':
-          data = await CheonanStation.findById('662faf654b75f88cbd2fd142');
+          data = await HolidaysCheonanAsanStation.findById('66128578e5520917f5ffee65');
           break;
         case 'CheonanTerminalStation':
-          data = await CheonanTerminalStation.findById('65ffdf4464a583def02d8c73');
-          break;
-        case 'OnyangOncheonStation':
-          data = await OnyangOncheonStation.findById('661261e6e5520917f5ffee55');
+          data = await HolidaysCheonanTerminalStation.findById('661284dce5520917f5ffee62');
           break;
         default:
           return res.status(404).json({ error: '指定されたステーションが見つかりません。' });

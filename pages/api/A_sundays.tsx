@@ -16,11 +16,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let data;
     switch (key) {
       case 'CheonanAsanStation':
-        data = await SundaysCheonanAsanStation.findById("66128375e5520917f5ffee5d");
+        data = await SundaysCheonanAsanStation.findById('66128375e5520917f5ffee5d');
         // console.log(data);
         break;
       case 'CheonanTerminalStation':
-        data = await SundaysCheonanTerminalStation.findById("66128403e5520917f5ffee5e");
+        data = await SundaysCheonanTerminalStation.findById('66128403e5520917f5ffee5e');
         // console.log(data);
         break;
       default:

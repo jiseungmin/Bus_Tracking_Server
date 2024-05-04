@@ -88,6 +88,28 @@ const sundaysfieldsMap = {
     'status',
   ],
 };
+
+const holidaysfieldsMap = {
+  '천안역/아산(KTX)역': [
+    'scheduleId',
+    'AsanCampusDeparture',
+    'CheonanAsanStation_trans1',
+    'CheonanStation',
+    'CheonanAsanStation_trans2',
+    'AsanCampusArrival',
+    'isFridayDriving',
+    'status',
+  ],
+  천안터미널: [
+    'scheduleId',
+    'AsanCampusDeparture',
+    'TerminalArrival',
+    'AsanCampusArrival',
+    'isFridayDriving',
+    'status',
+  ],
+};
+
 const weekdaystableHeaders = {
   천안역: [
     '순',
@@ -175,7 +197,30 @@ const sundaystableHeaders = {
     'add row',
   ],
 };
-
+const holidaystableHeaders = {
+  '천안역/아산(KTX)역': [
+    '순',
+    '아산캠퍼스 (출발)',
+    '천안아산역',
+    '천안역',
+    '천안아산역',
+    '아산캠퍼스(도착)',
+    '금요일운행여부',
+    '운행 여부',
+    '편집',
+    'add row',
+  ],
+  천안터미널: [
+    '순',
+    '아산캠퍼스 (출발)',
+    '터미널',
+    '아산캠퍼스(도착)',
+    '금요일운행 여부',
+    '운행 여부',
+    '편집',
+    'add row',
+  ],
+};
 export default function BusTimetable() {
   const [busSchedule, setBusSchedule] = useState<Schedule[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null); // 編集中のスケジュールID
@@ -208,6 +253,13 @@ export default function BusTimetable() {
           keyValue = keyMap[selectedItem];
         } else if (selectedMenu === '일요일') {
           apiPath = '/api/A_sundays';
+          const keyMap: { [key: string]: string } = {
+            '천안역/아산(KTX)역': 'CheonanAsanStation',
+            천안터미널: 'CheonanTerminalStation',
+          };
+          keyValue = keyMap[selectedItem];
+        } else if (selectedMenu === '토요일/공휴일') {
+          apiPath = '/api/A_holidays';
           const keyMap: { [key: string]: string } = {
             '천안역/아산(KTX)역': 'CheonanAsanStation',
             천안터미널: 'CheonanTerminalStation',
@@ -262,6 +314,11 @@ export default function BusTimetable() {
       sundaystableHeaders[selectedItem as keyof typeof sundaystableHeaders]
     ) {
       return sundaystableHeaders[selectedItem as keyof typeof sundaystableHeaders];
+    } else if (
+      selectedMenu === '토요일/공휴일' &&
+      holidaystableHeaders[selectedItem as keyof typeof holidaystableHeaders]
+    ) {
+      return holidaystableHeaders[selectedItem as keyof typeof holidaystableHeaders];
     }
     return []; // マッチするヘッダーがない場合は空配列を返す
   };
@@ -271,6 +328,8 @@ export default function BusTimetable() {
       return weekdaysfieldsMap;
     } else if (selectedMenu === '일요일') {
       return sundaysfieldsMap;
+    } else if (selectedMenu === '토요일/공휴일') {
+      return holidaysfieldsMap;
     }
     return {}; // デフォルトの空オブジェクト
   };
@@ -314,6 +373,13 @@ export default function BusTimetable() {
         keyValue = keyMap[selectedItem];
       } else if (selectedMenu === '일요일') {
         apiPath = '/api/A_sundays_put';
+        const keyMap: { [key: string]: string } = {
+          '천안역/아산(KTX)역': 'CheonanAsanStation',
+          천안터미널: 'CheonanTerminalStation',
+        };
+        keyValue = keyMap[selectedItem];
+      } else if (selectedMenu === '토요일/공휴일') {
+        apiPath = '/api/A_holidays_put';
         const keyMap: { [key: string]: string } = {
           '천안역/아산(KTX)역': 'CheonanAsanStation',
           천안터미널: 'CheonanTerminalStation',
@@ -426,6 +492,13 @@ export default function BusTimetable() {
           천안터미널: 'CheonanTerminalStation',
         };
         keyValue = keyMap[selectedItem];
+      } else if (selectedMenu === '토요일/공휴일') {
+        apiPath = '/api/A_holidays_put';
+        const keyMap: { [key: string]: string } = {
+          '천안역/아산(KTX)역': 'CheonanAsanStation',
+          천안터미널: 'CheonanTerminalStation',
+        };
+        keyValue = keyMap[selectedItem];
       }
 
       console.log('送信する全データ:', busSchedule);
@@ -457,6 +530,7 @@ export default function BusTimetable() {
       saveAllChanges();
       setTriggerSave(false); // 保存後にフラグをリセット
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [busSchedule, triggerSave]); // 依存配列に triggerSave を追加
 
   const addScheduleBelowRow = async (scheduleId: number) => {

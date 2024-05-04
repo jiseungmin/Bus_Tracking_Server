@@ -15,4 +15,4 @@ const cheonanAsanStationSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   CheonanAsanStation: [cheonanAsanStationscheduleEntrySchema]
 });
-export default mongoose.models.SundaysCheonanAsanStation || mongoose.model('SundaysCheonanAsanStation', cheonanAsanStationSchema, 'Sunday');
+export default mongoose.models.HolidaysCheonanAsanStation || mongoose.model('HolidaysCheonanAsanStation', cheonanAsanStationSchema, 'Saturday/Holidays');

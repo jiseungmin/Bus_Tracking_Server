@@ -9,11 +9,23 @@ import OnyangOncheonStation from '@/database/models/weekdays/M_OnyangOncheonStat
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await DbConnect();
+
+  const alldata = req.body;
+  console.log('Received data:', alldata);
+
   const scheduleIdToFind = parseInt(req.body.scheduleId);
   console.log('ScheduleId:', scheduleIdToFind);
 
+  const _id = req.query._id;
+  console.log('Received _id:', _id);
+
   const key = req.query.key;
   console.log('Received key:', key);
+
+  // isFullData クエリパラメータの受け取り
+  const isFullData = req.query.isFullData === 'true'; // 文字列 "true" が true として評価されるように変換
+  console.log('Is full data update:', isFullData);
+
   if (req.method === 'PUT') {
     try {
       let data;
@@ -41,24 +53,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(404).json({ error: 'データが見つかりません。' });
       }
 
-      const stationData = data[key]; // ダイナミックな参照
-
-      const foundSchedule = stationData.find(
-        (schedule: any) => schedule.scheduleId === scheduleIdToFind
-      );
-
-      if (foundSchedule) {
-        // 既存のスケジュールを更新
-        Object.keys(req.body).forEach((key) => {
-          if (key in foundSchedule) {
-            foundSchedule[key] = req.body[key];
-          }
-        });
+      if (isFullData) {
+        // 全データを更新するロジック
+        console.log('Updating all data for:', key);
+        // req.bodyを完全に新しいデータとして設定
+        data[key] = req.body.schedules; // req.body.schedules が新しいスケジュール配列と想定
+        console.log('All data replaced for:', key);
       } else {
-        // 新しいスケジュールを追加
-        const newSchedule = { ...req.body, scheduleId: scheduleIdToFind };
-        stationData.push(newSchedule);
-        console.log('new row data add:', newSchedule);
+        const stationData = data[key]; // ダイナミックな参照
+
+        const foundSchedule = stationData.find(
+          (schedule: any) => schedule.scheduleId === scheduleIdToFind
+        );
+
+        if (foundSchedule) {
+          // 既存のスケジュールを更新
+          console.log('既存のスケジュールを更新します。');
+          Object.keys(req.body).forEach((key) => {
+            if (key in foundSchedule) {
+              foundSchedule[key] = req.body[key];
+            }
+          });
+        } else {
+          // 新しいスケジュールを追加
+          console.log('新しいスケジュールを追加します。');
+          const newSchedule = { ...req.body, scheduleId: scheduleIdToFind };
+          stationData.push(newSchedule);
+          console.log('new row data add:', newSchedule);
+        }
       }
 
       await data.save();

@@ -22,7 +22,6 @@ export default function SendMessage() {
       if (notice_respones.ok) {
         // 요청이 성공적으로 처리된 경우
         console.log("notice_respones sent successfully");
-
         alert("공지사항이 등록되었습니다.");
       } else {
         // 서버에서 오류 응답을 받은 경우

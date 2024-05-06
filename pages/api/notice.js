@@ -8,16 +8,13 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     const { title, body } = req.body;
-
     const newNotice = await Notice.findById('663884393239381da72e56dc');
     newNotice.title = title;
     newNotice.content = body;
-
     await newNotice.save();
-
     res.status(200).send(newNotice);
   } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end('Method Not Allowed');
+    const newNotice = await Notice.findById('663884393239381da72e56dc');
+    res.status(200).send(newNotice);
   }
 }

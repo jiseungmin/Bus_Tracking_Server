@@ -1,13 +1,10 @@
-import { HomePage } from "@/components/component/homepage";
-import Image from "next/image";
-
-
+import HomePage from '@/pages/home/homepage';
 
 export default function Home() {
   return (
     <main>
       <div>
-        <HomePage></HomePage>
+        <HomePage />
       </div>
     </main>
   );

@@ -6,7 +6,6 @@ const cheonanTerminalStationEntrySchema = new mongoose.Schema({
     AsanCampusDeparture: String,
     TerminalArrival: String,
     AsanCampusArrival: String,
-    isFridayDriving: Boolean,
     status: String,
   });
 const cheonanTerminalStationSchema = new mongoose.Schema({

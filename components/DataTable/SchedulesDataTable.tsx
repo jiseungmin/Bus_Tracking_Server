@@ -76,7 +76,6 @@ const sundaysfieldsMap = {
     'CheonanStation',
     'CheonanAsanStation_trans2',
     'AsanCampusArrival',
-    'isFridayDriving',
     'status',
   ],
   천안터미널: [
@@ -84,11 +83,9 @@ const sundaysfieldsMap = {
     'AsanCampusDeparture',
     'TerminalArrival',
     'AsanCampusArrival',
-    'isFridayDriving',
     'status',
   ],
 };
-
 const holidaysfieldsMap = {
   '천안역/아산(KTX)역': [
     'scheduleId',
@@ -97,7 +94,6 @@ const holidaysfieldsMap = {
     'CheonanStation',
     'CheonanAsanStation_trans2',
     'AsanCampusArrival',
-    'isFridayDriving',
     'status',
   ],
   천안터미널: [
@@ -105,7 +101,6 @@ const holidaysfieldsMap = {
     'AsanCampusDeparture',
     'TerminalArrival',
     'AsanCampusArrival',
-    'isFridayDriving',
     'status',
   ],
 };
@@ -181,7 +176,6 @@ const sundaystableHeaders = {
     '천안역',
     '천안아산역',
     '아산캠퍼스(도착)',
-    '금요일운행여부',
     '운행 여부',
     '편집',
     'add row',
@@ -191,7 +185,6 @@ const sundaystableHeaders = {
     '아산캠퍼스 (출발)',
     '터미널',
     '아산캠퍼스(도착)',
-    '금요일운행 여부',
     '운행 여부',
     '편집',
     'add row',
@@ -205,7 +198,6 @@ const holidaystableHeaders = {
     '천안역',
     '천안아산역',
     '아산캠퍼스(도착)',
-    '금요일운행여부',
     '운행 여부',
     '편집',
     'add row',
@@ -215,12 +207,12 @@ const holidaystableHeaders = {
     '아산캠퍼스 (출발)',
     '터미널',
     '아산캠퍼스(도착)',
-    '금요일운행 여부',
     '운행 여부',
     '편집',
     'add row',
   ],
 };
+
 export default function BusTimetable() {
   const [busSchedule, setBusSchedule] = useState<Schedule[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null); // 編集中のスケジュールID
@@ -618,9 +610,9 @@ export default function BusTimetable() {
                     )
                   ) : field === 'isFridayDriving' ? (
                     schedule[field as keyof Schedule] ? (
-                      '운행함'
+                      '◯'
                     ) : (
-                      '운행안함'
+                      'X'
                     )
                   ) : (
                     schedule[field as keyof Schedule] || 'N/A'
@@ -635,7 +627,7 @@ export default function BusTimetable() {
                 )}
               </td>
               <td>
-                <button onClick={() => addScheduleBelowRow(schedule.scheduleId)}>行追加</button>
+                <button onClick={() => addScheduleBelowRow(schedule.scheduleId)}>행 추가</button>
               </td>
             </tr>
           ))}

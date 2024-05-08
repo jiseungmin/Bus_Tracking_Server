@@ -143,7 +143,7 @@ const DropdownMuen: React.FC<
       </div>
       <div className="pl-3">
         <Button
-          onClick={addNewSchedule} // ここで渡された関数を使用
+          onClick={addNewSchedule}
           size="icon"
           className="rounded-full border-gray-200 w-8 h-8 dark:border-gray-800"
         >

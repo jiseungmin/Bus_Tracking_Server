@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const foundSchedule = stationData.find(
           (schedule: any) => schedule.scheduleId === scheduleIdToFind
         );
-
+        console.log('foundSchedule:', foundSchedule);
         if (foundSchedule) {
           // 既存のスケジュールを更新
           console.log('既存のスケジュールを更新します。');

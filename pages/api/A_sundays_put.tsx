@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import DbConnect from '@/database/dbconnect';
 
 // 異なるステーションのデータモデルをインポートします
-import SundaysCheonanAsanStation from '@/database/models/sundays/M_CheonanAsanStation';
-import SundaysCheonanTerminalStation from '@/database/models/sundays/M_CheonanTerminalStation';
+import SundaysCheonanAsanStation from '@/database/models/semester/sundays/M_CheonanAsanStation';
+import SundaysCheonanTerminalStation from '@/database/models/semester/sundays/M_CheonanTerminalStation';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await DbConnect();

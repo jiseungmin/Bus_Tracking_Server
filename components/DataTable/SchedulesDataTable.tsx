@@ -217,16 +217,30 @@ export default function BusTimetable() {
   const [busSchedule, setBusSchedule] = useState<Schedule[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null); // 編集中のスケジュールID
   const [editScheduleData, setEditScheduleData] = useState<Schedule | null>(null); // 編集中のスケジュールデータ
-  const [selectedMenu, setSelectedMenu] = useState<string>(''); // nullから空文字に変更
-  const [selectedItem, setSelectedItem] = useState<string>(''); // nullから空文字に変更
+  const [selectedMenu, setSelectedMenu] = useState('평일'); // '평일' で初期化
+  const [selectedItem, setSelectedItem] = useState('천안역'); // '천안역' で初期化
   const [triggerSave, setTriggerSave] = useState(false); // 保存をトリガーするためのフラグ
+  const [scheduleIdValue, setScheduleIdValue] = useState('');
+  const [periodMenu, setPeriodMenu] = useState<'학기' | '방학' | null>('학기'); // PeriodMenuの状態を追加
+
+  // PeriodMenuの状態を更新する関数
+  const handlePeriodChange = (newPeriod: '학기' | '방학' | null) => {
+    setPeriodMenu(newPeriod);
+  };
 
   // 正しい状態更新関数を使用する
   const handleMenuChange = (menu: string, item: string) => {
+    console.log('Updating state to:', menu, item); // 状態更新前にログ出力
     setSelectedMenu(menu);
     setSelectedItem(item);
   };
-  const [scheduleIdValue, setScheduleIdValue] = useState('');
+
+  // useEffectを使用して状態変更を監視
+  useEffect(() => {
+    console.log('Selected periodMenu changed to:', periodMenu);
+    console.log('Selected Menu changed to:', selectedMenu);
+    console.log('Selected Item changed to:', selectedItem);
+  }, [selectedMenu, selectedItem, periodMenu]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -326,10 +340,8 @@ export default function BusTimetable() {
     return {}; // デフォルトの空オブジェクト
   };
 
-  // 表示するフィールドの配列を取得
   const fieldsToShow: string[] = (getFieldMap() as { [key: string]: string[] })[selectedItem] || [];
 
-  // handleEditChange関数を更新
   const handleEditChange = (value: string | boolean, field: keyof Schedule) => {
     if (editScheduleData == null) return;
     setEditScheduleData({
@@ -338,7 +350,6 @@ export default function BusTimetable() {
     });
   };
 
-  // 編集時にscheduleIdを使用するように変更
   const toggleEdit = (schedule: Schedule) => {
     setEditingId(schedule.scheduleId); // _idからscheduleIdに変更
     setEditScheduleData(schedule);
@@ -562,6 +573,9 @@ export default function BusTimetable() {
           onMenuChange={handleMenuChange}
           selectedMenu={selectedMenu}
           selectedItem={selectedItem}
+          periodMenu={periodMenu}
+          setPeriodMenu={setPeriodMenu}
+          onPeriodChange={handlePeriodChange}
         />
       </div>
       <table>

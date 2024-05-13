@@ -5,11 +5,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import DbConnect from '@/database/dbconnect';
 
 // 異なるステーションのデータモデルをインポートします
-import CheonanAsanStation from '@/database/models/weekdays/M_CheonanAsanStation';
-import CheonanCampus from '@/database/models/weekdays/M_CheonanCampus';
-import CheonanStation from '@/database/models/weekdays/M_CheonanStation';
-import CheonanTerminalStation from '@/database/models/weekdays/M_CheonanTerminalStation';
-import OnyangOncheonStation from '@/database/models/weekdays/M_OnyangOncheonStation';
+import CheonanAsanStation from '@/database/models/semester/weekdays/M_CheonanAsanStation';
+import CheonanCampus from '@/database/models/semester/weekdays/M_CheonanCampus';
+import CheonanStation from '@/database/models/semester/weekdays/M_CheonanStation';
+import CheonanTerminalStation from '@/database/models/semester/weekdays/M_CheonanTerminalStation';
+import OnyangOncheonStation from '@/database/models/semester/weekdays/M_OnyangOncheonStation';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await DbConnect();

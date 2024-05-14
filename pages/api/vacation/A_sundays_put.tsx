@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import DbConnect from '@/database/dbconnect';
 
 // 異なるステーションのデータモデルをインポートします
-import SundaysCheonanAsanStation from '@/database/models/sundays/M_CheonanAsanStation';
-import SundaysCheonanTerminalStation from '@/database/models/sundays/M_CheonanTerminalStation';
+import VactionSundaysCheonanAsanStation from '@/database/models/vacation/sundays/M_CheonanAsanStation';
+import VactionSundaysCheonanTerminalStation from '@/database/models/vacation/sundays/M_CheonanTerminalStation';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await DbConnect();
@@ -29,10 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       let data;
       switch (key) {
         case 'CheonanAsanStation':
-          data = await SundaysCheonanAsanStation.findById('66128375e5520917f5ffee5d');
+          data = await VactionSundaysCheonanAsanStation.findById('6642109d583bee2d14252455');
           break;
         case 'CheonanTerminalStation':
-          data = await SundaysCheonanTerminalStation.findById('66128403e5520917f5ffee5e');
+          data = await VactionSundaysCheonanTerminalStation.findById('664210a2583bee2d14252456');
           break;
         default:
           return res.status(404).json({ error: '指定されたステーションが見つかりません。' });

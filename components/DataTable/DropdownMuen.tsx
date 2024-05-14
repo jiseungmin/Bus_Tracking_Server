@@ -10,54 +10,55 @@ import {
   MenubarTrigger,
 } from '@/components/ui/menubar';
 
+// 全体動的に変更
+const MENU_ITEMS1: Record<string, string[]> = {
+  평일: ['천안역', '아산(KTX)역', '천안터미널', '온양역/터미널', '천안캠퍼스'],
+  '토요일/공휴일': ['천안역/아산(KTX)역', '천안터미널'],
+  일요일: ['천안역/아산(KTX)역', '천안터미널'],
+};
+
+const MENU_ITEMS2: Record<string, string[]> = {
+  평일: ['천안역/아산(KTX)역', '천안터미널', '온양터미널/온양역'],
+  토요일: ['천안역/아산(KTX)역', '천안터미널'],
+  일요일: ['천안역/아산(KTX)역', '천안터미널'],
+};
+
 // DropdownMuen コンポーネントの props タイプ定義
 type DropdownMuenProps = {
   addNewSchedule: () => void; // この関数の正確な型に応じて調整してください
   onMenuChange: (menu: string, item: string) => void;
   selectedMenu: string; // 追加
   selectedItem: string; // 追加
+  periodMenu: '학기' | '방학' | null; // 親コンポーネントから受け取る
+  setPeriodMenu: (newPeriod: '학기' | '방학' | null) => void;
+  onPeriodChange: (newPeriod: '학기' | '방학' | null) => void; // 親コンポーネントから受け取る状態更新関数
 };
 
 const DropdownMuen: React.FC<
   DropdownMuenProps & { onMenuChange: (menu: string, item: string) => void }
-> = ({ addNewSchedule, onMenuChange }) => {
-  // useStateのデフォルト値を設定する代わりに、
-  // useEffect内でlocalStorageから値を読み込む
-  const [selectedMenu, setSelectedMenu] = useState<'학기' | '방학' | null>(null);
+> = ({ addNewSchedule, onMenuChange, periodMenu, onPeriodChange,setPeriodMenu }) => {
+  // const [PeriodMenu, setPeriodMenu] = useState<'학기' | '방학' | null>('학기');
+  const [selectedItem, setSelectedItem] = useState<{ menu: string | null; item: string | null }>({
+    menu: '평일',
+    item: '천안역',
+  });
+
+  const [currentMenuItems, setCurrentMenuItems] = useState(MENU_ITEMS1);
 
   useEffect(() => {
-    // ローカルストレージから選択されたメニューを読み込む
-    // クライアントサイドでのみ実行されることを保証
-    const storedSelection =
-      typeof window !== 'undefined' ? localStorage.getItem('selectedMenu') : null;
-
-    // storedSelectionが '학기' または '방학' の場合のみ、状態を更新
-    if (storedSelection === '학기' || storedSelection === '방학') {
-      setSelectedMenu(storedSelection);
+    // selectedMenuの変更に応じてメニュー項目を切り替える
+    if (periodMenu === '방학') {
+      setCurrentMenuItems(MENU_ITEMS2);
     } else {
-      // ローカルストレージに有効な値がない場合は、デフォルトで '학기' を選択
-      setSelectedMenu('학기');
+      setCurrentMenuItems(MENU_ITEMS1);
     }
-  }, []);
+  }, [periodMenu]); // selectedMenuが変更されるたびに実行
 
-  useEffect(() => {
-    // selectedMenuが null でない場合に限り、localStorageに保存
-    if (selectedMenu) {
-      localStorage.setItem('selectedMenu', selectedMenu);
-    }
-  }, [selectedMenu]);
-
-  // 全体動的に変更
-  const MENU_ITEMS: Record<string, string[]> = {
-    평일: ['천안역', '아산(KTX)역', '천안터미널', '온양역/터미널', '천안캠퍼스'],
-    '토요일/공휴일': ['천안역/아산(KTX)역', '천안터미널'],
-    일요일: ['천안역/아산(KTX)역', '천안터미널'],
+  // PeriodMenuの変更を扱うトリガー関数を修正
+  const handlePeriodMenuClick = (newPeriod: '학기' | '방학') => {
+    onPeriodChange(newPeriod); // 親コンポーネントの関数を呼び出す
   };
 
-  const [selectedItem, setSelectedItem] = useState<{ menu: string | null; item: string | null }>({
-    menu: null,
-    item: null,
-  });
   // 選択状態を更新する関数
   const handleSelectionChange = (menu: string, item: string) => {
     setSelectedItem({ menu, item });
@@ -72,14 +73,15 @@ const DropdownMuen: React.FC<
             <MenubarMenu>
               <MenubarTrigger
                 onClick={() => {
-                  setSelectedMenu('학기');
-                  onMenuChange('학기', ''); // 학기が選択された時に親コンポーネントに通知
+                  setPeriodMenu('학기');
+                  setSelectedItem({ menu: '평일', item: '천안역' }); // デフォルトのアイテムを設定
+                  onMenuChange('평일', '천안역'); // 親コンポーネントに通知
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <div
                     style={{
-                      visibility: selectedMenu === '학기' ? 'visible' : 'hidden',
+                      visibility: periodMenu === '학기' ? 'visible' : 'hidden',
                     }}
                   >
                     <Check className="mr-2 h-4 w-4" />
@@ -91,14 +93,15 @@ const DropdownMuen: React.FC<
             <MenubarMenu>
               <MenubarTrigger
                 onClick={() => {
-                  setSelectedMenu('방학');
-                  onMenuChange('방학', ''); // 방학が選択された時に親コンポーネントに通知
+                  setPeriodMenu('방학');
+                  setSelectedItem({ menu: '평일', item: '천안역/아산(KTX)역' }); // デフォルトのアイテムを設定
+                  onMenuChange('평일', '천안역/아산(KTX)역'); // 방학が選択された時に親コンポーネントに通知
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <div
                     style={{
-                      visibility: selectedMenu === '방학' ? 'visible' : 'hidden',
+                      visibility: periodMenu === '방학' ? 'visible' : 'hidden',
                     }}
                   >
                     <Check className="mr-2 h-4 w-4" />
@@ -111,7 +114,7 @@ const DropdownMuen: React.FC<
         </div>
         <div>
           <Menubar>
-            {Object.entries(MENU_ITEMS).map(([menuTitle, items]) => (
+            {Object.entries(currentMenuItems).map(([menuTitle, items]) => (
               <MenubarMenu key={menuTitle}>
                 <MenubarTrigger>{menuTitle}</MenubarTrigger>
                 <MenubarContent>
@@ -143,7 +146,7 @@ const DropdownMuen: React.FC<
       </div>
       <div className="pl-3">
         <Button
-          onClick={addNewSchedule} // ここで渡された関数を使用
+          onClick={addNewSchedule}
           size="icon"
           className="rounded-full border-gray-200 w-8 h-8 dark:border-gray-800"
         >

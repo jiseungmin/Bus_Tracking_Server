@@ -1,0 +1,24 @@
+{
+  "CheonanTerminalStation": [
+    {
+      "scheduleId": "1",
+      "AsanCampusDeparture": "홍길동",
+      "Terminal": "01024936446",
+      "OldDujeongdongMcDonalds": "01024936446",
+      "HomeMartEveryday": "01024936446",
+      "SeoulNationalUniversityHospital": "01024936446",
+      "AsanCampusArrival": "01024936446",
+      "status": "01024936446"
+    },
+    {
+      "scheduleId": "2",
+      "AsanCampusDeparture": "홍길동",
+      "Terminal": "01024936446",
+      "OldDujeongdongMcDonalds": "01024936446",
+      "HomeMartEveryday": "01024936446",
+      "SeoulNationalUniversityHospital": "01024936446",
+      "AsanCampusArrival": "01024936446",
+      "status": "01024936446"
+    }
+  ]
+}

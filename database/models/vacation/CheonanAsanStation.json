@@ -1,0 +1,30 @@
+{
+  "CheonanAsanStation": [
+    {
+      "scheduleId": "1",
+      "AsanCampusDeparture": "홍길동",
+      "CheonanAsanStationArrival": "01024936446",
+      "WolbongCheongsol1Danji": "01024936446",
+      "SsangyongDongHiMart": "01024936446",
+      "CheonanStation": "01024936446",
+      "OppositeHighlexSpa": "01024936446",
+      "YongamVillage": "01024936446",
+      "CheonanAsanStationDeparture": "01024936446",
+      "AsanCampusArrival": "01024936446",
+      "status": "01024936446"
+    },
+    {
+      "scheduleId": "2",
+      "AsanCampusDeparture": "홍길동",
+      "CheonanAsanStationArrival": "01024936446",
+      "WolbongCheongsol1Danji": "01024936446",
+      "SsangyongDongHiMart": "01024936446",
+      "CheonanStation": "01024936446",
+      "OppositeHighlexSpa": "01024936446",
+      "YongamVillage": "01024936446",
+      "CheonanAsanStationDeparture": "01024936446",
+      "AsanCampusArrival": "01024936446",
+      "status": "01024936446"
+    }
+  ]
+}

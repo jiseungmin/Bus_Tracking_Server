@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import DbConnect from '@/database/dbconnect';
 
 // 異なるステーションのデータモデルをインポートします
-import HolidaysCheonanAsanStation from '@/database/models/holidays/M_CheonanAsanStation';
-import HolidaysCheonanTerminalStation from '@/database/models/holidays/M_CheonanTerminalStation';
+import VactionHolidaysCheonanAsanStation from '@/database/models/vacation/holidays/M_CheonanAsanStation';
+import VactionHolidaysCheonanTerminalStation from '@/database/models/vacation/holidays/M_CheonanTerminalStation';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await DbConnect();
@@ -29,10 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       let data;
       switch (key) {
         case 'CheonanAsanStation':
-          data = await HolidaysCheonanAsanStation.findById('66128578e5520917f5ffee65');
+          data = await VactionHolidaysCheonanAsanStation.findById('66420baf583bee2d1425244e');
           break;
         case 'CheonanTerminalStation':
-          data = await HolidaysCheonanTerminalStation.findById('661284dce5520917f5ffee62');
+          data = await VactionHolidaysCheonanTerminalStation.findById('66420fb1583bee2d14252453');
           break;
         default:
           return res.status(404).json({ error: '指定されたステーションが見つかりません。' });
@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const foundSchedule = stationData.find(
           (schedule: any) => schedule.scheduleId === scheduleIdToFind
         );
-
+        console.log('foundSchedule:', foundSchedule);
         if (foundSchedule) {
           // 既存のスケジュールを更新
           console.log('既存のスケジュールを更新します。');

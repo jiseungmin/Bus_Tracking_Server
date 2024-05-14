@@ -1,0 +1,14 @@
+{
+  "Driverdata": [
+    {
+      "Platenumber": "123456",
+      "DriverName": "홍길동",
+      "Phonenumber": "01024936446"
+    },
+    {
+      "Platenumber": "7891234",
+      "DriverName": "김철수",
+      "Phonenumber": "01012345678"
+    }
+  ]
+}

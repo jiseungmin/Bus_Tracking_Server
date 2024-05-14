@@ -15,6 +15,7 @@ const onyangOncheonStationSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   OnyangOncheonStation: [onyangOncheonStationscheduleEntrySchema]
 });
-export default mongoose.models.OnyangOncheonStation || mongoose.model('OnyangOncheonStation', onyangOncheonStationSchema, 'Weekday');
+export default mongoose.models.OnyangOncheonStation ||
+mongoose.model('OnyangOncheonStation', onyangOncheonStationSchema, 'Weekday');
 
 

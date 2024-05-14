@@ -11,6 +11,8 @@ export default async function handler(req, res) {
     // 0. Push Notification Title & content 내용을 값을 으로 받음
     const { title, body } = req.body;
 
+    console.log('in');
+
     // 1. DB에 모든 토큰 배열에 담기
     const tokens = await Token.find({});
     const tokenValues = tokens.map((token) => token.Token);

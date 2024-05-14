@@ -1,11 +1,11 @@
-// http://localhost:3000/api/A_sundays?key=CheonanAsanStation
-// pages\api\A_sundays.ts
+// pages\api\A_holidays.tsx
+// http://localhost:3000/api/vacation/A_holidays?key=CheonanAsanStation
 import type { NextApiRequest, NextApiResponse } from 'next';
 import DbConnect from '@/database/dbconnect';
 
 // 異なるステーションのデータモデルをインポートします
-import SundaysCheonanAsanStation from '@/database/models/sundays/M_CheonanAsanStation';
-import SundaysCheonanTerminalStation from '@/database/models/sundays/M_CheonanTerminalStation';
+import VactionHolidaysCheonanAsanStation from '@/database/models/vacation/holidays/M_CheonanAsanStation';
+import VactionHolidaysCheonanTerminalStation from '@/database/models/vacation/holidays/M_CheonanTerminalStation';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await DbConnect();
@@ -16,12 +16,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let data;
     switch (key) {
       case 'CheonanAsanStation':
-        data = await SundaysCheonanAsanStation.findById('66128375e5520917f5ffee5d');
-        // console.log(data);
+        data = await VactionHolidaysCheonanAsanStation.findById('66420baf583bee2d1425244e');
         break;
       case 'CheonanTerminalStation':
-        data = await SundaysCheonanTerminalStation.findById('66128403e5520917f5ffee5e');
-        // console.log(data);
+        data = await VactionHolidaysCheonanTerminalStation.findById('66420fb1583bee2d14252453');
         break;
       default:
         return res.status(404).json({ error: '指定されたステーションが見つかりません。' });

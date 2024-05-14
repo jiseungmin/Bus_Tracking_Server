@@ -6,11 +6,10 @@ const cheonanTerminalStationEntrySchema = new mongoose.Schema({
     AsanCampusDeparture: String,
     TerminalArrival: String,
     AsanCampusArrival: String,
-    isFridayDriving: Boolean,
     status: String,
   });
 const cheonanTerminalStationSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   CheonanTerminalStation: [cheonanTerminalStationEntrySchema]
 });
-export default mongoose.models.SundaysCheonanTerminalStation || mongoose.model('SundaysCheonanTerminalStation', cheonanTerminalStationSchema, 'Sunday');
+export default mongoose.models.HolidaysCheonanTerminalStation || mongoose.model('HolidaysCheonanTerminalStation', cheonanTerminalStationSchema, 'Saturday/Holidays');

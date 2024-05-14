@@ -1,0 +1,24 @@
+{
+  "OnyangOncheonStation": [
+    {
+      "scheduleId": "1",
+      "AsanCampusDeparture": "홍길동",
+      "JueunApartmentBusStop": "01024936446",
+      "OnyangOncheonStation": "01024936446",
+      "AsanTerminal": "01024936446",
+      "KwonGokElementarySchoolBusStop": "01024936446",
+      "AsanCampusArrival": "01024936446",
+      "status": "01024936446"
+    },
+    {
+      "scheduleId": "2",
+      "AsanCampusDeparture": "홍길동",
+      "JueunApartmentBusStop": "01024936446",
+      "OnyangOncheonStation": "01024936446",
+      "AsanTerminal": "01024936446",
+      "KwonGokElementarySchoolBusStop": "01024936446",
+      "AsanCampusArrival": "01024936446",
+      "status": "01024936446"
+    }
+  ]
+}

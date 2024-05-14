@@ -22,19 +22,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // keyの値に応じて異なる処理を行う
     switch (key) {
       case 'CheonanAsanStation':
-        data = await CheonanAsanStation.findById("66126978e5520917f5ffee56");
+        data = await CheonanAsanStation.findById('66126978e5520917f5ffee56');
         break;
       case 'CheonanCampus':
-        data = await CheonanCampus.findById("66150c037a5e033c5904ffb5");
+        data = await CheonanCampus.findById('66150c037a5e033c5904ffb5');
         break;
       case 'CheonanStation':
-        data = await CheonanStation.findById("662faf654b75f88cbd2fd142");
+        data = await CheonanStation.findById('662faf654b75f88cbd2fd142');
         break;
       case 'CheonanTerminalStation':
-        data = await CheonanTerminalStation.findById("65ffdf4464a583def02d8c73");
+        data = await CheonanTerminalStation.findById('65ffdf4464a583def02d8c73');
         break;
       case 'OnyangOncheonStation':
-        data = await OnyangOncheonStation.findById("661261e6e5520917f5ffee55");
+        data = await OnyangOncheonStation.findById('661261e6e5520917f5ffee55');
         break;
       default:
         return res.status(404).json({ error: '指定されたステーションが見つかりません。' });

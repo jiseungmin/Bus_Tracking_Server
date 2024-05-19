@@ -14,10 +14,18 @@ import OnyangOncheonStation from '@/database/models/semester/weekdays/M_OnyangOn
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await DbConnect();
 
-  const { key } = req.query;
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8081'); // Allow requests from this origin
+  const allowedOrigins = ['http://localhost:8081', 'https://dist-gilt-ten.vercel.app'];
+  
+  const origin = req.headers.origin as string | undefined;
+  
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin); // 요청 헤더의 origin을 설정
+  } 
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS'); // Allow these methods
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow these headers
+
+  const { key } = req.query;
+  
 
 
   try {

@@ -3,6 +3,7 @@ import driverModel from "../../database/models/drivers/M_driver"; // 모델 파�
 
 export default async function handler(req, res) {
   const allowedOrigins = ['http://localhost:8081', 'https://dist-gilt-ten.vercel.app'];
+  const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin); // 요청 헤더의 origin을 설정
   }

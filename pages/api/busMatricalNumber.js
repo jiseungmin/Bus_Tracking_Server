@@ -2,7 +2,10 @@ import dbConnect from '../../database/dbconnect';
 import driverModel from "../../database/models/drivers/M_driver"; // 모델 파일의 경로를 지정하세요
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8081'); // Allow requests from this origin
+  const allowedOrigins = ['http://localhost:8081', 'https://dist-gilt-ten.vercel.app'];
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin); // 요청 헤더의 origin을 설정
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS'); // Allow these methods
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow these headers
 

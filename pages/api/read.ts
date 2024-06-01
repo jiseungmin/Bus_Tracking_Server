@@ -3,15 +3,20 @@ import path from 'path';
 import { promises as fs } from 'fs';
 
 const CACHE_PATH =
-  process.env.VERCEL === '1'
-    ? path.join('/tmp')
-    : path.join(process.cwd(), 'notion', 'cache');
+  process.env.VERCEL === '1' ? path.join('/tmp') : path.join(process.cwd(), 'notion', 'cache');
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  res.setHeader('Access-Control-Allow-Origin', 'https://student-eta.vercel.app'); // Allow requests from this origin
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const allowedOrigins = [
+    'http://localhost:8081',
+    'https://driver-dun.vercel.app',
+    'https://student-eta.vercel.app',
+  ];
+
+  const origin = req.headers.origin as string | undefined;
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin); // 요청 헤더의 origin을 설정
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS'); // Allow these methods
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow these headers
 
@@ -22,7 +27,6 @@ export default async function handler(
       const readPath = path.join(CACHE_PATH, filePath);
       const content = await fs.readFile(readPath, 'utf-8');
       res.status(200).json({ content });
-
     } catch (error) {
       res.status(500).json({ error: 'Failed to read file' });
     }

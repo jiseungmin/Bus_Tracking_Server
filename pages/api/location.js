@@ -9,17 +9,21 @@ export const config = {
 
 export default async function handler(req, res) {
   // CORS 설정
-  const allowedOrigins = [
-    'http://localhost:8081',
-    'https://driver-smu.vercel.app',
-    'https://student-smu.vercel.app',
-  ];
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin); // 요청 헤더의 origin을 설정
+  if (req.method === 'OPTIONS') {
+    const allowedOrigins = [
+      'http://localhost:8081',
+      'https://driver-smu.vercel.app',
+      'https://student-smu.vercel.app',
+    ];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin); // 요청 헤더의 origin을 설정
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS'); // Allow these methods
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow these headers
+    res.status(200).end();
+    return;
   }
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS'); // Allow these methods
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow these headers
 
   // DB 연결
   await dbConnect();
@@ -43,6 +47,7 @@ export default async function handler(req, res) {
         existingLocation.longitude = longitude;
         existingLocation.expireAt = new Date(Date.now() + 3 * 60 * 1000);
         await existingLocation.save();
+
         res
           .status(200)
           .json({ message: 'Location updated successfully', location: existingLocation });

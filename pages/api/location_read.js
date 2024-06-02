@@ -25,10 +25,14 @@ export default async function handler(req, res) {
   await dbConnect();
   console.log('DB Connect.');
 
-  if (req.method === 'POST') {
+  if (req.method === 'GET') {
     try {
+      // 모든 Location 문서를 찾기
+      const allLocations = await Location.find({});
+      console.log(allLocations);
+      res.status(200).json({ locations: allLocations });
     } catch (error) {
-      console.error('Error saving location:', error);
+      console.error('Error fetching locations:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   } else {

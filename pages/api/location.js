@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   // CORS 설정
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Change this to your client URL
+    res.setHeader('Access-Control-Allow-Origin', 'https://driver-smu.vercel.app'); // Change this to your client URL
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
     res.setHeader(
       'Access-Control-Allow-Headers',

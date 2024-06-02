@@ -14,7 +14,7 @@ import OnyangOncheonStation from '@/database/models/semester/weekdays/M_OnyangOn
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await DbConnect();
 
-  const allowedOrigins = ['http://localhost:8081', 'https://driver-dun.vercel.app', 'https://student-eta.vercel.app'];
+  const allowedOrigins = ['http://localhost:8081', 'https://driver-smu.vercel.app', 'https://student-smu.vercel.app'];
   
   const origin = req.headers.origin as string | undefined;
   

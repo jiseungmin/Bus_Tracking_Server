@@ -8,8 +8,8 @@ const CACHE_PATH =
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const allowedOrigins = [
     'http://localhost:8081',
-    'https://driver-dun.vercel.app',
-    'https://student-eta.vercel.app',
+    'https://driver-smu.vercel.app',
+    'https://student-smu.vercel.app',
   ];
 
   const origin = req.headers.origin as string | undefined;

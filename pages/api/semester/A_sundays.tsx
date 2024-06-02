@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await DbConnect();
 
   const { key } = req.query; // クエリパラメータからkeyの値を取得
-  res.setHeader('Access-Control-Allow-Origin', 'https://student-eta.vercel.app'); // Allow requests from this origin
+  res.setHeader('Access-Control-Allow-Origin', 'https://student-smu.vercel.app'); // Allow requests from this origin
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS'); // Allow these methods
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow these headers
 

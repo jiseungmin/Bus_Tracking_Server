@@ -3,7 +3,7 @@ import Notice from '../../database/models/notice';
 
 export default async function handler(req, res) {
   // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', 'https://student-eta.vercel.app'); // Allow requests from this origin
+  res.setHeader('Access-Control-Allow-Origin', 'https://student-smu.vercel.app'); // Allow requests from this origin
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS'); // Allow these methods
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow these headers
 

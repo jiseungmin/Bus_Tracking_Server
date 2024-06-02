@@ -10,13 +10,17 @@ export const config = {
 export default async function handler(req, res) {
   // CORS 설정
   if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Change this to your client URL
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-    );
+    const allowedOrigins = [
+      'http://localhost:8081',
+      'https://driver-smu.vercel.app',
+      'https://student-smu.vercel.app',
+    ];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin); // 요청 헤더의 origin을 설정
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS'); // Allow these methods
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow these headers
     res.status(200).end();
     return;
   }

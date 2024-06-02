@@ -40,25 +40,19 @@ export default async function handler(req, res) {
       const { busorder, latitude, longitude, timestamp, station, busTime, busNumber } = data;
 
       // 기존 데이터 확인 및 잠금
-      const existingLocation = await Location.findOneAndUpdate(
-        { busorder, station },
-        {
-          $set: {
-            latitude,
-            longitude,
-            timestamp,
-            busTime,
-            busNumber,
-            expireAt: new Date(Date.now() + 3 * 60 * 1000),
-          },
-        },
-        { new: true, session }
-      );
+      const existingLocation = await Location.findOne({ busorder, station }).session(session);
 
       if (existingLocation) {
-        console.log('Existing location updated:', existingLocation);
+        console.log('Existing location found:', existingLocation);
+        // 기존 데이터가 있으면 latitude와 longitude 업데이트
+        existingLocation.latitude = latitude;
+        existingLocation.longitude = longitude;
+        existingLocation.expireAt = new Date(Date.now() + 3 * 60 * 1000);
+        await existingLocation.save({ session });
+
         await session.commitTransaction();
         session.endSession();
+
         res
           .status(200)
           .json({ message: 'Location updated successfully', location: existingLocation });

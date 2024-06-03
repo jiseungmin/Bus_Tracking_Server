@@ -1,4 +1,4 @@
-import { saveToken } from "../../src/tokenStorage";
+import { saveToken } from "./tokenStorage";
 
 export default function handler(req, res) {
     if (req.method === 'POST') {

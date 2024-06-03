@@ -23,7 +23,8 @@
     "database/dbconnect.ts",
     // "database/DBconnect.js",
     "database/models/bus.js",
-    "pages/api/A_weekdays_put3.js"
+    "pages/api/A_weekdays_put3.js",
+    "scripts/addUser.js"
   ],
   "exclude": ["node_modules"]
 }

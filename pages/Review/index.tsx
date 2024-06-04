@@ -27,7 +27,6 @@ export default function ReviewsPage() {
   const downloadCSV = () => {
     setLoading(true);
 
-    // CSVのヘッダーを設定
     const headers = ['ID', 'Evaluation', 'Review Contents', 'Timestamps'];
     const csvContent = [
       headers.join(','),

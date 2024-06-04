@@ -1,5 +1,3 @@
-import dbConnect from '../../database/dbconnect';
-import Token from '../../database/models/usertoken';
 
 export default async function handler(req, res) {
   // DB 연결

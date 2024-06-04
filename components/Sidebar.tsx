@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Home, User, Clock, Blocks } from 'lucide-react';
+import { Home, User, Clock, Blocks, BookUser } from 'lucide-react';
 import Link from 'next/link';
 
 const navLinks = [
@@ -13,6 +13,11 @@ const navLinks = [
     href: '/drivers',
     label: 'Drivers',
     icon: User,
+  },
+  {
+    href: '/Review',
+    label: 'Review',
+    icon: BookUser,
   },
   {
     href: '/schedules',

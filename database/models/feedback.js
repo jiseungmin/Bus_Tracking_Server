@@ -8,7 +8,7 @@ const FeedbackSchema = new mongoose.Schema(
     expireAt: {
       type: Date,
       required: true,
-      index: { expires: '3d' }, 
+      index: { expires: '1d' }, 
     },
   },
   {

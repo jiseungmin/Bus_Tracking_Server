@@ -35,7 +35,7 @@ export default async function handler(req, res) {
       // 요청 본문에서 JSON 데이터 파싱
       const { email, userType, content } = req.body;
       const expireAt = new Date();
-      expireAt.setMonth(expireAt.getMonth() + 3);
+      expireAt.setMonth(expireAt.getMonth() + 1);
 
       // 피드백 데이터 생성
       const newFeedback = new FeedBack({

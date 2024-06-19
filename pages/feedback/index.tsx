@@ -13,9 +13,10 @@ export default function ReviewsPage() {
   useEffect(() => {
     async function fetchReviews() {
       try {
-        const response = await fetch('/api/Review/A_userReviews');
+        const response = await fetch('/api/Feedback/feedback');
         const data = await response.json();
         setReviews(data);
+        
       } catch (error) {
         console.error('Error fetching reviews:', error);
       }
@@ -26,19 +27,21 @@ export default function ReviewsPage() {
 
   const downloadCSV = () => {
     setLoading(true);
-
-    const headers = ['ID', 'Evaluation', 'Review Contents', 'Timestamps'];
+  
+    const headers = ['Email', 'UserType', 'Content', 'Timestamp'];
     const csvContent = [
       headers.join(','),
-      ...reviews.map((review) =>
-        [review._id, review.evaluation, review.ReviewContents, review.timestamps].join(',')
-      ),
+      ...reviews.map((review) => {
+        const date = new Date(review.createdAt);
+        const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+        return [review.email, review.userType, review.content, formattedDate].join(',');
+      })
     ].join('\n');
-
+  
     const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'reviews.csv';
+    link.download = 'Feedback.csv';
     link.click();
     setLoading(false);
   };
@@ -67,7 +70,7 @@ export default function ReviewsPage() {
             </div>
             <div className="space-y-4">
               {reviews.map((review) => (
-                <ReviewCard key={review._id} review={review} />
+                <ReviewCard key={review.email} review={review} />
               ))}
             </div>
           </main>

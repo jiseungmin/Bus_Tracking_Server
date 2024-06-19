@@ -1,5 +1,5 @@
-import dbConnect from '../../database/dbconnect';
-import FeedBack from '../../database/models/feedback';
+import dbConnect from '../../../database/dbconnect';
+import FeedBack from '../../../database/models/feedback';
 
 export const config = {
   api: {
@@ -53,7 +53,11 @@ export default async function handler(req, res) {
       console.error('Error saving feedback:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  } else {
+  } else if (req.method === 'GET'){
+    const Reviews = await FeedBack.find({});
+    console.log(Reviews)
+    res.status(200).json(Reviews);
+  }else {
     res.status(405).json({ error: 'Method Not Allowed' });
   }
 }

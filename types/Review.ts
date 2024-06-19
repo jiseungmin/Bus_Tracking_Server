@@ -1,6 +1,7 @@
 export type ReviewType = {
-    _id: string;
-    evaluation: number;
-    ReviewContents: string;
-    timestamps: string;
-  };
+  email: string;
+  userType: string;
+  content: string;
+  expireAt: Date;
+  createdAt: Date;
+};

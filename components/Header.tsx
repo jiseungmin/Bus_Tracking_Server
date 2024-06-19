@@ -4,16 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Bell, Blocks, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 
-interface HeaderProps {
-  // 必要に応じてpropsを定義
-}
+interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = (props) => {
-  const router = useRouter(); // useRouterフックを使用
-
-  // URLのパス名を取得して加工
-  const pathName = router.pathname.substring(1); // 最初のスラッシュを取り除く
-  const pageTitle = pathName.charAt(0).toUpperCase() + pathName.slice(1); // 最初の文字を大文字にする
+  const router = useRouter(); 
+  const pathName = router.pathname.substring(1); 
+  const pageTitle = pathName.charAt(0).toUpperCase() + pathName.slice(1); 
 
   return (
     <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">

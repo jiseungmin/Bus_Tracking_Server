@@ -15,8 +15,8 @@ const navLinks = [
     icon: User,
   },
   {
-    href: '/Review',
-    label: 'Review',
+    href: '/feedback',
+    label: 'Feedback',
     icon: BookUser,
   },
   {

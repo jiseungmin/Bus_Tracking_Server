@@ -21,9 +21,6 @@ type ReviewCardProps = {
 };
 
 export default function ReviewCard({ review }: ReviewCardProps) {
-  console.log("review: ", review.email);
-  console.log("review: ", review.userType);
-  console.log("review: ", review.content);
   const { email, userType, content, expireAt, createdAt } = review;
 
   return (
@@ -34,7 +31,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         </CardHeader>
         <CardContent className="p-4">
           <div className="text-gray-700 mb-2">
-            <span className="font-semibold">유저 이름:</span> {email}
+            <span className="font-semibold">유저 이메일:</span> {email}
           </div>
           <div className="text-gray-700 mb-2">
             <span className="font-semibold">유저 타입:</span> {userType}
